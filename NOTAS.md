@@ -299,3 +299,191 @@ Las tablas largas no incluyen `description` ni `cast` (para que pesen poco: 2,7 
 2. **Otras preguntas abiertas:** aceptar la corrección de los ceros en el informe, formato del resumen ejecutivo (PDF o PPTX), integrantes del grupo.
 3. **Siguiente fase:** Fase 2 (`notebooks/02_eda_visualizaciones.ipynb`): EDA y gráficos estáticos película vs serie, con ficha por gráfico (problema, audiencia, mensaje, métrica de orden) y checklist de IE5/IE6.
 4. **Hito de cierre (Entrega final):** Una vez completados y validados todos los entregables formales (informe PDF, dashboard, código en `src/`, notebooks y datasets en `data/processed/`), **eliminar del repositorio todas las notas internas (`NOTAS.md`, `01_analisis_y_plan.md`, `02_feedback_ep1_y_foco_visual.md`) y las pautas en PDF** antes de realizar la entrega final.
+
+---
+
+## Entrada 03 — Revisión de coherencia de títulos en EDA (2026-10-05)
+
+### Objetivo
+Verificar que cada título de sección en 
+otebooks/02_eda_visualizaciones.ipynb comunique el **hallazgo** del gráfico, no solo la variable o el tipo de visualización.
+
+### Qué se hizo
+Se auditaron los 8 títulos (## G1 a ## G8) contra su campo **Mensaje**. Se identificaron 6 títulos genéricos o descriptivos del método que no anticipaban el hallazgo.
+
+### Archivos modificados
+- 
+otebooks/02_eda_visualizaciones.ipynb — 6 celdas markdown editadas.
+
+### Decisiones tomadas
+- Un título debe responder a la pregunta: *¿qué descubre este gráfico?*, no *¿qué muestra?*
+- Formato adoptado: ## Gn — [Hallazgo conciso]: [detalle del mensaje]
+
+### Cambios realizados
+| Gráfico | Antes | Después |
+|---------|-------|---------|
+| G2 | Distribución de popularidad (boxplot con IQR) | Popularidad sesgada: la mediana es más representativa que el promedio |
+| G3 | Densidad por género | Eficiencia por género: calidad percibida por unidad de popularidad |
+| G4 | Volumen por género (solo géneros presentes en ambos tipos) | Concentración de la oferta: géneros dominantes en cada catálogo |
+| G5 | Evolución por año de estreno | Confiabilidad decreciente: la nota de los títulos recientes es menos fiable |
+| G6 | Países de producción | Diversidad geográfica: las series están menos concentradas que las películas |
+| G7 | Engagement vs calificación | Señales independientes: popularidad y calificación no se correlacionan |
+
+G1 y G8 se mantuvieron sin cambio (ya eran coherentes).
+
+### Pendiente
+- Fase 2 completada (EDA + gráficos). Siguiente: **Fase 3** — Definición y cálculo de KPIs (src/kpis.py, data/processed/kpis_*.csv, 
+eports/glosario.md).
+
+---
+
+## Entrada 04 — Cierre de notas de contexto 01 y 02 (2026-10-05)
+
+### Objetivo
+Verificar que el contenido de  1_analisis_y_plan.md y  2_feedback_ep1_y_foco_visual.md quedó implementado en los notebooks antes de eliminarlos del repositorio.
+
+### Resultado de la verificación
+
+#### 01_analisis_y_plan.md → implementado en su totalidad
+| Ítem del plan | Dónde quedó |
+|---|---|
+| Estructura de carpetas (Fase 0) | Completada; README y requirements en raíz |
+| content_id = tipo + show_id (llave compuesta) | NB01 — Decisión 1 |
+| ote_average_clean (ceros → NaN) y bandera calificacion_confiable | NB01 — Sección 2 y Decisión 3 |
+| indice_engagement (percentil dentro del tipo) | NB01 — Decisión 4; usado en NB02 G7 |
+| Homologación de géneros con mapa_generos.csv | NB01 — Sección 4 y Decisión 5 |
+| Duplicados en series (9 repetidos 2025) | NB01 — Decisión 2 |
+| 8 gráficos del EDA (G1–G8) con ficha problema/mensaje/métrica | NB02 — completo |
+| Preguntas abiertas (herramienta dashboard, formato resumen ejecutivo, integrantes) | **Siguen abiertas — ver "Pendiente" abajo** |
+
+#### 02_feedback_ep1_y_foco_visual.md → implementado en su totalidad
+| Ítem del feedback | Dónde quedó |
+|---|---|
+| Regla "una métrica, un criterio" (orden = largo = título) | Encabezado de NB02; aplicada en G1–G8 |
+| Colores fijos: Película = azul, Serie = naranja | Reglas NB02 encabezado |
+| Título = mensaje (hallazgo, no nombre de variable) | Revisión Entrada 03; G2–G7 ajustados |
+| Máx. 5–7 categorías, resto en "Otros" | Aplicado en G3, G4, G6, G8 (top 7) |
+| Barras desde cero; escala log solo con aviso | Aplicado en G2 (boxplot) y G7 (hexbin log) |
+| Control de consistencia: cifras desde mismo CSV | src/ + data/processed/ como única fuente |
+| Enlace/entrega Looker Studio pendiente para el final | Se mantiene como pendiente en Fase 6 |
+
+### Archivos eliminados
+-  1_analisis_y_plan.md
+-  2_feedback_ep1_y_foco_visual.md
+
+### Pendiente y cómo continuar
+1. **Decisión abierta:** herramienta del dashboard (Plotly + Streamlit/Dash recomendado, Power BI o Looker Studio).
+2. **Decisión abierta:** aceptar la corrección de ceros en el informe y declararlo.
+3. **Decisión abierta:** formato del resumen ejecutivo (PDF o PPTX).
+4. **Decisión abierta:** integrantes del grupo (¿mismos de EP1?).
+5. **Siguiente fase:** Fase 3 — Definición y cálculo de KPIs (src/kpis.py, data/processed/kpis_*.csv, 
+eports/glosario.md, IE18).
+
+---
+
+## Entrada 05 — Decisión Looker Studio y Fase 3 (KPIs) (2026-10-05)
+
+### Decisiones del usuario
+1. **Dashboard en Looker Studio.** Cierra la decisión abierta de las Entradas 01–04. El enlace/entrega queda para la Fase 6.
+2. **Los notebooks se usan solo para los gráficos de análisis.** No se crea dashboard en código.
+
+### Qué se hizo
+- `src/kpis.py`: genera `looker_contenido.csv` (una fila por título, con `genero_principal`, `pais_principal` y columnas aditivas para SUM/COUNT), calcula 10 KPIs por dos vías independientes (pandas y estilo Looker) y las compara en total, por tipo y en 30 selecciones aleatorias. Contrasta además con cifras de la Entrada 03 (falla si no coinciden).
+- `reports/glosario.md`: 9 KPIs con definición, cálculo, base y límites.
+
+### Archivos
+- `src/kpis.py`, `reports/glosario.md`
+- `data/processed/`: `looker_contenido.csv`, `kpis_resumen.csv`, `kpis_por_anio.csv`, `kpis_por_genero.csv`, `kpis_por_pais.csv`, `kpis_verificacion.csv`
+
+### Decisiones y motivo
+1. Una sola tabla alimenta todos los KPIs de Looker para que cada filtro (incluido género y país) los afecte. Para eso se usan `genero_principal` y `pais_principal` (primer género/país de cada título). Las tablas largas se usan solo en gráficos de desglose y por eso pueden diferir levemente del filtro principal.
+2. Porcentajes de KPIs bajo filtro: suma(numerador) / cuenta(registros de la selección). Los porcentajes de G4 y G6 usan base fija = total del tipo.
+3. ROI agregado usa solo filas con presupuesto e ingresos (`presupuesto_roi`, `ingresos_roi`) para que numerador y denominador sean consistentes.
+4. Densidad y popularidad cruda solo se comparan dentro de un mismo tipo.
+
+### Pendiente
+1. Correr `python src/kpis.py` con los datos reales; si el contraste con la Entrada 03 falla, revisar `kpis_verificacion.csv`.
+2. Fase 4: construir el dashboard en Looker (conectar `looker_contenido.csv`, páginas y filtros).
+3. Siguen abiertas: corregir cifras de EP1 en el informe, formato del resumen (PDF/PPTX), integrantes.
+
+---
+
+## Entrada 06 — Corrección de la retroalimentación de EP1 (2026-10-05)
+
+La retroalimentación real de la docente en EP1 tiene solo dos puntos:
+1. El enlace al dashboard de Looker Studio quedó como placeholder (debe completarse para evaluar la interactividad real).
+2. El gráfico "Top géneros" del dashboard en vivo no refleja el mismo resultado que el notebook y el informe (Drama dominando).
+
+Rúbrica EP1 a mejorar (ambas en "Buen desempeño", meta: "Muy buen desempeño"): IE5 atributos visuales, 12,8/16; IE6 carga cognitiva, 16/20.
+
+**Corrección:** las Entradas 01–04 atribuyen a la docente otras reglas (porcentajes sobre base fija, ROI por director, ordenar por densidad, boxplot con IQR). Eso NO está en su retroalimentación. Son decisiones de diseño del equipo, no requisitos. En particular, los porcentajes de los KPIs usan como denominador la selección filtrada.
+
+---
+
+## Entrada 07 — Verificación con datos reales y correcciones de mensajes (2026-10-05)
+
+### Verificación
+- `python src/limpieza.py` regenera exactamente los 6 CSV de `data/processed/`; 15 controles de calidad en OK.
+- `python src/kpis.py`: KPIs coinciden con la Entrada 03 (6,309 / 7,024 de calificación; 88,6 % / 38,4 % con votos suficientes; 3.540 películas con datos financieros; ROI mediano 1,70×). Las dos vías de cálculo coinciden en 300 de 300 comparaciones.
+
+### Errores corregidos en NB02
+1. G7: el encabezado decía "no se correlacionan" pero r = 0,25 (películas) y 0,13 (series). Ahora: relación débil.
+2. G5: el título decía que la cobertura de votos de las series cae de 30 % a 7 %. En realidad sube de 30 % a 50 % hasta 2024 y se desploma solo en 2025 (títulos recientes: series 7 %, películas 9 %).
+3. G6: países en español (`PAISES_ES` en `src/kpis.py`, usado también por Looker) y título con el hallazgo (EE. UU.: 49 % de las películas, 20 % de las series).
+4. G8: mínimo de 5 películas por director (antes 3, el ranking lo dominaba la franquicia Terrifier con 46×) y se muestra la mediana. Mediana global 1,70× (tabla unificada).
+
+### Cambios a KPIs
+- "Engagement promedio" se reemplaza por "% de alto engagement" (percentil ≥ 75 dentro del tipo): el promedio valía 50 por construcción.
+- Densidad y popularidad promedio mezclan escalas de popularidad si se muestran con ambos tipos: en Looker, solo con un tipo seleccionado.
+- La regla "base fija" no viene de la docente (ver Entrada 06).
+
+### Pendiente
+1. Re-ejecutar `src/kpis.py` y el notebook 02 con los cambios.
+2. Fase 4: dashboard en Looker. Cada gráfico debe mostrar la misma métrica, orden y cifras que su equivalente del notebook (`cifras_clave_eda.csv`), sobre todo Top géneros.
+3. README y `requirements.txt` (no los he visto), informe PDF y resumen ejecutivo.
+---
+
+# ENTRADA 08 — Fase 3 completada: KPIs calculados, verificados y glosario (2026-10-05)
+
+**Estado:** Fase 3 **terminada**. src/kpis.py y eports/glosario.md creados y validados.
+
+## Qué se hizo
+- src/kpis.py: calcula KPIs globales y segmentados (por año, género, país), genera looker_contenido.csv como fuente única para el dashboard, y verifica los resultados con dos vías independientes (pandas vs numpy/estilo-Looker).
+- eports/glosario.md: define cada KPI con su fórmula, base de cálculo y límites.
+- Notebook 02 re-ejecutado con las correcciones de Entrada 07 (mensajes G5, G6, G7, G8); todos los outputs actualizados.
+
+## Archivos generados / modificados
+| Archivo | Estado |
+|---|---|
+| src/kpis.py | Creado (nuevo) |
+| eports/glosario.md | Creado (nuevo) |
+| data/processed/looker_contenido.csv | Generado — 1 fila por título, columnas para Looker |
+| data/processed/kpis_resumen.csv | Generado — KPIs globales + por tipo |
+| data/processed/kpis_por_anio.csv | Generado |
+| data/processed/kpis_por_genero.csv | Generado |
+| data/processed/kpis_por_pais.csv | Generado |
+| data/processed/kpis_verificacion.csv | Generado — 300 comparaciones vía pandas vs numpy |
+| 
+otebooks/02_eda_visualizaciones.ipynb | Re-ejecutado con correcciones |
+
+## Cifras reales obtenidas (python src/kpis.py)
+| KPI | Total | Película | Serie |
+|---|---|---|---|
+| Títulos | 31.991 | 16.000 | 15.991 |
+| Calificación promedio | 6,630 | 6,309 | 7,024 |
+| % con votos suficientes | 63,6 % | 88,6 % | 38,4 % |
+| % alto engagement (p ≥ 75) | 25,0 % | 25,0 % | 25,0 % |
+| Popularidad promedio | 42,6 | 20,4 | 64,9 |
+| Densidad | 0,156 | 0,309 | 0,108 |
+| ROI agregado | 2,917× | 2,917× | N/A |
+| ROI mediano | 1,700× | 1,700× | N/A |
+| Películas con datos financieros | 3.540 (22,1 %) | — | — |
+| % del catálogo | 100 % | 50,0 % | 50,0 % |
+
+## Verificación
+- **300/300** comparaciones vía pandas vs numpy coinciden (tolerancia rtol=1e-9).
+- **9/9** contrastes con cifras históricas de NOTAS.md en OK (títulos, calificaciones, cobertura de votos, datos financieros, ROI mediano).
+
+## Pendiente y cómo continuar
+- **Siguiente fase:** Fase 4 — Dashboard interactivo en Looker Studio. Fuente: data/processed/looker_contenido.csv. Cada gráfico debe mostrar la misma métrica, orden y cifras que su equivalente en el notebook (cifras_clave_eda.csv si existe, o tabla directa del CSV).
+- Sigue abierta: corrección de cifras de EP1 en el informe, formato del resumen (PDF/PPTX), integrantes.
