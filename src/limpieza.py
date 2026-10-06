@@ -31,7 +31,7 @@ MAPA_GENEROS = {
     "Action": "Acción y Aventura", "Adventure": "Acción y Aventura",
     "Science Fiction": "Ciencia ficción y Fantasía", "Fantasy": "Ciencia ficción y Fantasía",
     "War": "Guerra y Política", "Thriller": "Suspenso", "Horror": "Terror",
-    "TV Movie": "Película de TV", "Music": "Música", "History": "Historia",
+    "Music": "Música", "History": "Historia",
     "Animation": "Animación", "Comedy": "Comedia", "Crime": "Crimen",
     "Documentary": "Documental", "Drama": "Drama", "Family": "Familia",
     "Mystery": "Misterio", "Romance": "Romance", "Western": "Western",
@@ -88,6 +88,10 @@ def limpiar(df: pd.DataFrame) -> pd.DataFrame:
 
     for col in ["director", "cast", "country", "genres", "description"]:
         df[col] = df[col].fillna(NO_ESP)
+
+    # Eliminar 'TV Movie' porque es un formato, no un género
+    df["genres"] = df["genres"].str.replace(r'\bTV Movie\b,?\s*', '', regex=True).str.replace(r',\s*$', '', regex=True)
+    df.loc[df["genres"] == "", "genres"] = NO_ESP
 
     df["idioma"] = df["language"].map(IDIOMAS).fillna(df["language"])
 

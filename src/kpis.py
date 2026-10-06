@@ -59,6 +59,30 @@ def preparar_looker(df, gen, pais):
             "vote_average_clean", "confiable_num", "financiero_num", "presupuesto_roi", "ingresos_roi", "roi"]
     return out[cols]
 
+def preparar_looker_genero(gen):
+    """Una fila por título y género: fuente de TODOS los gráficos de género en Looker
+    (misma base que G3 y G4 del notebook; un título aparece una vez por cada género)."""
+    out = gen[gen["genero_unificado"] != NO_ESP].copy()
+    out["confiable_num"] = out["calificacion_confiable"].astype(int)
+    out["alto_engagement"] = (out["indice_engagement"] >= UMBRAL_ALTO_ENGAGEMENT).astype(int)
+    cols = ["content_id", "title", "tipo_contenido", "release_year", "idioma", "genero_unificado",
+            "indice_engagement", "alto_engagement", "vote_average_clean", "confiable_num"]
+    return out[cols]
+
+
+def verificar_genero(lg, por_gen, n_tipo):
+    """Replica en estilo Looker (COUNT_DISTINCT / total del tipo) el % por género y lo compara con kpis_por_genero."""
+    filas = []
+    for (tipo, gen_), d in lg.groupby(["tipo_contenido", "genero_unificado"]):
+        ref = por_gen[(por_gen.tipo_contenido == tipo) & (por_gen.genero_unificado == gen_)]
+        if ref.empty:       # kpis_por_genero solo incluye géneros con >= 100 títulos
+            continue
+        pct = d["content_id"].nunique() / n_tipo[tipo] * 100
+        cal = d["vote_average_clean"].dropna()
+        ok = np.isclose(pct, ref["pct_del_tipo"].iloc[0]) and np.isclose(cal.mean(), ref["calificacion_prom"].iloc[0])
+        filas.append((tipo, gen_, pct, ref["pct_del_tipo"].iloc[0], bool(ok)))
+    return pd.DataFrame(filas, columns=["tipo_contenido", "genero", "pct_looker", "pct_kpis_por_genero", "ok"])
+
 
 # ---------------------------------------------------------------- vía 1: pandas
 def kpis_pandas(d):
@@ -72,8 +96,6 @@ def kpis_pandas(d):
         "pct_confiable": d["confiable_num"].sum() / n * 100 if n else np.nan,
         "pct_alto_engagement": d["alto_engagement"].sum() / n * 100 if n else np.nan,
         "pct_estrella": d["es_estrella"].sum() / n * 100 if n else np.nan,
-        "popularidad_prom": d["popularity"].mean(),
-        "densidad": d["vote_average_clean"].mean() / d["popularity"].mean(),
         "roi_agregado": fin["ingresos_roi"].sum() / fin["presupuesto_roi"].sum() if len(fin) else np.nan,
         "roi_mediano": fin["roi"].median() if len(fin) else np.nan,
         "peliculas_con_datos_fin": len(fin),
@@ -87,7 +109,6 @@ def kpis_looker(d):
     n = d["content_id"].nunique()
     cal = d["vote_average_clean"].to_numpy(float)
     ok = ~np.isnan(cal)
-    pop = d["popularity"].to_numpy(float)
     alto = d["alto_engagement"].to_numpy(float)
     est = d["es_estrella"].to_numpy(float)
     conf = d["confiable_num"].to_numpy(float)
@@ -103,8 +124,6 @@ def kpis_looker(d):
         "pct_confiable": conf.sum() / n * 100 if n else np.nan,
         "pct_alto_engagement": alto.sum() / n * 100 if n else np.nan,
         "pct_estrella": est.sum() / n * 100 if n else np.nan,
-        "popularidad_prom": pop.sum() / pop.size,
-        "densidad": cal_prom / (pop.sum() / pop.size),
         "roi_agregado": np.nansum(ing[fin]) / np.nansum(pre[fin]) if fin.any() else np.nan,
         "roi_mediano": mediana,
         "peliculas_con_datos_fin": int(fin.sum()),
@@ -156,8 +175,7 @@ def tabla_largas(largo, col, minimo=100):
                       "pct_del_tipo": np.nan,  # se completa abajo (base fija = total del tipo)
                       "calificacion_prom": d.vote_average_clean.mean(),
                       "pct_confiable": d.confiable_num.sum() / n * 100,
-                      "pct_alto_engagement": d.alto_engagement.sum() / n * 100,
-                      "densidad": d.vote_average_clean.mean() / d.popularity.mean()})
+                      "pct_alto_engagement": d.alto_engagement.sum() / n * 100})
     return pd.DataFrame(filas)
 
 
@@ -182,8 +200,14 @@ def ejecutar(guardar=True):
     por_pais["pct_del_tipo"] = por_pais.titulos / por_pais.tipo_contenido.map(n_tipo) * 100
 
     ver = verificar(looker)
+    lg = preparar_looker_genero(gen)
+    ver_gen = verificar_genero(lg, por_gen, n_tipo)
+    ver = pd.concat([ver, ver_gen.assign(seleccion="Género (tabla larga)", kpi="pct_del_tipo + calificacion_prom")
+                     [["seleccion", "kpi", "pct_looker", "pct_kpis_por_genero", "ok"]]
+                     .rename(columns={"pct_looker": "via_pandas", "pct_kpis_por_genero": "via_looker"})], ignore_index=True)
     if guardar:
         looker.to_csv(PROC / "looker_contenido.csv", index=False)
+        lg.to_csv(PROC / "looker_genero.csv", index=False)
         resumen.to_csv(PROC / "kpis_resumen.csv")
         por_anio.to_csv(PROC / "kpis_por_anio.csv", index=False)
         por_gen.to_csv(PROC / "kpis_por_genero.csv", index=False)
