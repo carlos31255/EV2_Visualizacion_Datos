@@ -21,7 +21,7 @@ PROC = ROOT / "data" / "processed"
 NO_ESP = "No especificado"
 
 UMBRAL_ALTO_ENGAGEMENT = 75   # percentil dentro del tipo desde el cual un título es de "alto engagement"
-
+UMBRAL_ESTRELLA_NOTA = 7      # nota mínima (con votos confiables) para ser título "estrella"
 PAISES_ES = {
     "United States of America": "Estados Unidos", "Japan": "Japón", "United Kingdom": "Reino Unido",
     "China": "China", "South Korea": "Corea del Sur", "France": "Francia", "Canada": "Canadá",
@@ -45,6 +45,9 @@ def preparar_looker(df, gen, pais):
     out["pais_principal"] = out["pais_principal"].fillna(NO_ESP)
     out["pais_principal"] = out["pais_principal"].map(PAISES_ES).fillna(out["pais_principal"])
     out["alto_engagement"] = (out["indice_engagement"] >= UMBRAL_ALTO_ENGAGEMENT).astype(int)
+    out["es_estrella"] = ((out["indice_engagement"] >= UMBRAL_ALTO_ENGAGEMENT)
+                          & out["calificacion_confiable"].astype(bool)
+                          & (out["vote_average_clean"] >= UMBRAL_ESTRELLA_NOTA)).astype(int)
     out["es_pelicula"] = (out["tipo_contenido"] == "Película").astype(int)
     out["confiable_num"] = out["calificacion_confiable"].astype(int)
     fin = out["tiene_datos_financieros"]
@@ -52,7 +55,7 @@ def preparar_looker(df, gen, pais):
     out["ingresos_roi"] = out["revenue_clean"].where(fin)
     out["financiero_num"] = fin.astype(int)
     cols = ["content_id", "title", "tipo_contenido", "es_pelicula", "release_year", "idioma",
-            "genero_principal", "pais_principal", "popularity", "indice_engagement", "alto_engagement", "vote_count",
+            "genero_principal", "pais_principal", "popularity", "indice_engagement", "alto_engagement", "es_estrella", "vote_count",
             "vote_average_clean", "confiable_num", "financiero_num", "presupuesto_roi", "ingresos_roi", "roi"]
     return out[cols]
 
@@ -68,6 +71,7 @@ def kpis_pandas(d):
         "calificacion_prom": d["vote_average_clean"].mean(),
         "pct_confiable": d["confiable_num"].sum() / n * 100 if n else np.nan,
         "pct_alto_engagement": d["alto_engagement"].sum() / n * 100 if n else np.nan,
+        "pct_estrella": d["es_estrella"].sum() / n * 100 if n else np.nan,
         "popularidad_prom": d["popularity"].mean(),
         "densidad": d["vote_average_clean"].mean() / d["popularity"].mean(),
         "roi_agregado": fin["ingresos_roi"].sum() / fin["presupuesto_roi"].sum() if len(fin) else np.nan,
@@ -85,6 +89,7 @@ def kpis_looker(d):
     ok = ~np.isnan(cal)
     pop = d["popularity"].to_numpy(float)
     alto = d["alto_engagement"].to_numpy(float)
+    est = d["es_estrella"].to_numpy(float)
     conf = d["confiable_num"].to_numpy(float)
     fin = d["financiero_num"].to_numpy(float) == 1
     pel = d["es_pelicula"].to_numpy(float)
@@ -97,6 +102,7 @@ def kpis_looker(d):
         "calificacion_prom": cal_prom,
         "pct_confiable": conf.sum() / n * 100 if n else np.nan,
         "pct_alto_engagement": alto.sum() / n * 100 if n else np.nan,
+        "pct_estrella": est.sum() / n * 100 if n else np.nan,
         "popularidad_prom": pop.sum() / pop.size,
         "densidad": cal_prom / (pop.sum() / pop.size),
         "roi_agregado": np.nansum(ing[fin]) / np.nansum(pre[fin]) if fin.any() else np.nan,

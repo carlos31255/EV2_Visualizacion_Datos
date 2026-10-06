@@ -3,6 +3,7 @@ Total,titulos,31991.0,31991.0,True
 Total,calificacion_prom,6.630075571433779,6.630075571433779,True
 Total,pct_confiable,63.55224907005095,63.55224907005095,True
 Total,pct_alto_engagement,25.010159107248914,25.010159107248914,True
+Total,pct_estrella,8.468006626863806,8.468006626863806,True
 Total,popularidad_prom,42.62601466037323,42.62601466037323,True
 Total,densidad,0.15554059238846343,0.15554059238846343,True
 Total,roi_agregado,2.916554424658258,2.916554424658258,True
@@ -13,6 +14,7 @@ Películas,titulos,16000.0,16000.0,True
 Películas,calificacion_prom,6.308876605322388,6.308876605322388,True
 Películas,pct_confiable,88.64375,88.64375,True
 Películas,pct_alto_engagement,25.0125,25.0125,True
+Películas,pct_estrella,8.075000000000001,8.075000000000001,True
 Películas,popularidad_prom,20.384728062500002,20.384728062500002,True
 Películas,densidad,0.30949034914663764,0.30949034914663764,True
 Películas,roi_agregado,2.916554424658258,2.916554424658258,True
@@ -23,6 +25,7 @@ Series,titulos,15991.0,15991.0,True
 Series,calificacion_prom,7.023749533468559,7.0237495334685605,True
 Series,pct_confiable,38.44662622725283,38.44662622725283,True
 Series,pct_alto_engagement,25.007816897004563,25.007816897004563,True
+Series,pct_estrella,8.861234444374961,8.861234444374961,True
 Series,popularidad_prom,64.87981902320055,64.87981902320055,True
 Series,densidad,0.1082578471890761,0.10825784718907613,True
 Series,roi_agregado,,,True
@@ -33,6 +36,7 @@ Selección aleatoria 1,titulos,2.0,2.0,True
 Selección aleatoria 1,calificacion_prom,,,True
 Selección aleatoria 1,pct_confiable,0.0,0.0,True
 Selección aleatoria 1,pct_alto_engagement,0.0,0.0,True
+Selección aleatoria 1,pct_estrella,0.0,0.0,True
 Selección aleatoria 1,popularidad_prom,12.6105,12.6105,True
 Selección aleatoria 1,densidad,,,True
 Selección aleatoria 1,roi_agregado,,,True
@@ -43,6 +47,7 @@ Selección aleatoria 2,titulos,36.0,36.0,True
 Selección aleatoria 2,calificacion_prom,6.488485714285715,6.488485714285715,True
 Selección aleatoria 2,pct_confiable,72.22222222222221,72.22222222222221,True
 Selección aleatoria 2,pct_alto_engagement,25.0,25.0,True
+Selección aleatoria 2,pct_estrella,0.0,0.0,True
 Selección aleatoria 2,popularidad_prom,35.54858333333333,35.54858333333333,True
 Selección aleatoria 2,densidad,0.18252445261866643,0.18252445261866643,True
 Selección aleatoria 2,roi_agregado,3.162323818181818,3.162323818181818,True
@@ -53,6 +58,7 @@ Selección aleatoria 4,titulos,87.0,87.0,True
 Selección aleatoria 4,calificacion_prom,6.767301886792453,6.7673018867924535,True
 Selección aleatoria 4,pct_confiable,40.229885057471265,40.229885057471265,True
 Selección aleatoria 4,pct_alto_engagement,28.735632183908045,28.735632183908045,True
+Selección aleatoria 4,pct_estrella,9.195402298850574,9.195402298850574,True
 Selección aleatoria 4,popularidad_prom,54.9598275862069,54.9598275862069,True
 Selección aleatoria 4,densidad,0.12313178887211106,0.12313178887211107,True
 Selección aleatoria 4,roi_agregado,2.7261660256730433,2.7261660256730433,True
@@ -63,6 +69,7 @@ Selección aleatoria 5,titulos,23.0,23.0,True
 Selección aleatoria 5,calificacion_prom,6.077875000000001,6.077875000000001,True
 Selección aleatoria 5,pct_confiable,17.391304347826086,17.391304347826086,True
 Selección aleatoria 5,pct_alto_engagement,39.130434782608695,39.130434782608695,True
+Selección aleatoria 5,pct_estrella,4.3478260869565215,4.3478260869565215,True
 Selección aleatoria 5,popularidad_prom,39.862173913043485,39.862173913043485,True
 Selección aleatoria 5,densidad,0.15247224130973025,0.15247224130973025,True
 Selección aleatoria 5,roi_agregado,,,True
@@ -73,6 +80,7 @@ Selección aleatoria 6,titulos,93.0,93.0,True
 Selección aleatoria 6,calificacion_prom,6.444488636363636,6.444488636363636,True
 Selección aleatoria 6,pct_confiable,72.04301075268818,72.04301075268818,True
 Selección aleatoria 6,pct_alto_engagement,11.827956989247312,11.827956989247312,True
+Selección aleatoria 6,pct_estrella,0.0,0.0,True
 Selección aleatoria 6,popularidad_prom,28.970956989247313,28.970956989247313,True
 Selección aleatoria 6,densidad,0.22244652252100386,0.22244652252100386,True
 Selección aleatoria 6,roi_agregado,1.5598338627966208,1.5598338627966208,True
@@ -83,6 +91,7 @@ Selección aleatoria 7,titulos,9.0,9.0,True
 Selección aleatoria 7,calificacion_prom,5.757142857142857,5.757142857142858,True
 Selección aleatoria 7,pct_confiable,33.33333333333333,33.33333333333333,True
 Selección aleatoria 7,pct_alto_engagement,11.11111111111111,11.11111111111111,True
+Selección aleatoria 7,pct_estrella,0.0,0.0,True
 Selección aleatoria 7,popularidad_prom,19.758777777777777,19.758777777777777,True
 Selección aleatoria 7,densidad,0.29137140575657355,0.2913714057565736,True
 Selección aleatoria 7,roi_agregado,,,True
@@ -93,6 +102,7 @@ Selección aleatoria 8,titulos,3.0,3.0,True
 Selección aleatoria 8,calificacion_prom,6.5793333333333335,6.5793333333333335,True
 Selección aleatoria 8,pct_confiable,100.0,100.0,True
 Selección aleatoria 8,pct_alto_engagement,66.66666666666666,66.66666666666666,True
+Selección aleatoria 8,pct_estrella,33.33333333333333,33.33333333333333,True
 Selección aleatoria 8,popularidad_prom,134.28633333333332,134.28633333333332,True
 Selección aleatoria 8,densidad,0.04899480959839547,0.04899480959839547,True
 Selección aleatoria 8,roi_agregado,,,True
@@ -103,6 +113,7 @@ Selección aleatoria 9,titulos,58.0,58.0,True
 Selección aleatoria 9,calificacion_prom,6.414000000000001,6.414000000000001,True
 Selección aleatoria 9,pct_confiable,77.58620689655173,77.58620689655173,True
 Selección aleatoria 9,pct_alto_engagement,29.310344827586203,29.310344827586203,True
+Selección aleatoria 9,pct_estrella,10.344827586206897,10.344827586206897,True
 Selección aleatoria 9,popularidad_prom,32.59494827586207,32.59494827586207,True
 Selección aleatoria 9,densidad,0.19677895929504624,0.19677895929504624,True
 Selección aleatoria 9,roi_agregado,1.5884296736427885,1.5884296736427885,True
@@ -113,6 +124,7 @@ Selección aleatoria 10,titulos,1.0,1.0,True
 Selección aleatoria 10,calificacion_prom,,,True
 Selección aleatoria 10,pct_confiable,0.0,0.0,True
 Selección aleatoria 10,pct_alto_engagement,0.0,0.0,True
+Selección aleatoria 10,pct_estrella,0.0,0.0,True
 Selección aleatoria 10,popularidad_prom,13.847,13.847,True
 Selección aleatoria 10,densidad,,,True
 Selección aleatoria 10,roi_agregado,,,True
@@ -123,6 +135,7 @@ Selección aleatoria 11,titulos,40.0,40.0,True
 Selección aleatoria 11,calificacion_prom,6.371588235294118,6.3715882352941176,True
 Selección aleatoria 11,pct_confiable,57.49999999999999,57.49999999999999,True
 Selección aleatoria 11,pct_alto_engagement,30.0,30.0,True
+Selección aleatoria 11,pct_estrella,10.0,10.0,True
 Selección aleatoria 11,popularidad_prom,38.9407,38.9407,True
 Selección aleatoria 11,densidad,0.16362284795327559,0.16362284795327556,True
 Selección aleatoria 11,roi_agregado,0.6164745833502477,0.6164745833502477,True
@@ -133,6 +146,7 @@ Selección aleatoria 12,titulos,14.0,14.0,True
 Selección aleatoria 12,calificacion_prom,6.478846153846154,6.478846153846154,True
 Selección aleatoria 12,pct_confiable,71.42857142857143,71.42857142857143,True
 Selección aleatoria 12,pct_alto_engagement,21.428571428571427,21.428571428571427,True
+Selección aleatoria 12,pct_estrella,0.0,0.0,True
 Selección aleatoria 12,popularidad_prom,18.103714285714286,18.103714285714286,True
 Selección aleatoria 12,densidad,0.3578738623244092,0.3578738623244092,True
 Selección aleatoria 12,roi_agregado,0.2645683181818182,0.2645683181818182,True
@@ -143,6 +157,7 @@ Selección aleatoria 14,titulos,3.0,3.0,True
 Selección aleatoria 14,calificacion_prom,6.9,6.9,True
 Selección aleatoria 14,pct_confiable,33.33333333333333,33.33333333333333,True
 Selección aleatoria 14,pct_alto_engagement,33.33333333333333,33.33333333333333,True
+Selección aleatoria 14,pct_estrella,0.0,0.0,True
 Selección aleatoria 14,popularidad_prom,57.977000000000004,57.977000000000004,True
 Selección aleatoria 14,densidad,0.11901271193749245,0.11901271193749245,True
 Selección aleatoria 14,roi_agregado,2.53084498,2.53084498,True
@@ -153,6 +168,7 @@ Selección aleatoria 15,titulos,1.0,1.0,True
 Selección aleatoria 15,calificacion_prom,7.9,7.9,True
 Selección aleatoria 15,pct_confiable,100.0,100.0,True
 Selección aleatoria 15,pct_alto_engagement,0.0,0.0,True
+Selección aleatoria 15,pct_estrella,0.0,0.0,True
 Selección aleatoria 15,popularidad_prom,11.327,11.327,True
 Selección aleatoria 15,densidad,0.6974485742032313,0.6974485742032313,True
 Selección aleatoria 15,roi_agregado,,,True
@@ -163,6 +179,7 @@ Selección aleatoria 16,titulos,87.0,87.0,True
 Selección aleatoria 16,calificacion_prom,6.801902777777777,6.801902777777777,True
 Selección aleatoria 16,pct_confiable,47.12643678160919,47.12643678160919,True
 Selección aleatoria 16,pct_alto_engagement,27.586206896551722,27.586206896551722,True
+Selección aleatoria 16,pct_estrella,6.896551724137931,6.896551724137931,True
 Selección aleatoria 16,popularidad_prom,70.08363218390805,70.08363218390805,True
 Selección aleatoria 16,densidad,0.09705408475303834,0.09705408475303834,True
 Selección aleatoria 16,roi_agregado,2.7186541723025255,2.7186541723025255,True
@@ -173,6 +190,7 @@ Selección aleatoria 17,titulos,3.0,3.0,True
 Selección aleatoria 17,calificacion_prom,7.95,7.95,True
 Selección aleatoria 17,pct_confiable,66.66666666666666,66.66666666666666,True
 Selección aleatoria 17,pct_alto_engagement,0.0,0.0,True
+Selección aleatoria 17,pct_estrella,0.0,0.0,True
 Selección aleatoria 17,popularidad_prom,8.831,8.831,True
 Selección aleatoria 17,densidad,0.900237798663798,0.900237798663798,True
 Selección aleatoria 17,roi_agregado,,,True
@@ -183,6 +201,7 @@ Selección aleatoria 18,titulos,57.0,57.0,True
 Selección aleatoria 18,calificacion_prom,6.121102040816326,6.121102040816327,True
 Selección aleatoria 18,pct_confiable,47.368421052631575,47.368421052631575,True
 Selección aleatoria 18,pct_alto_engagement,19.298245614035086,19.298245614035086,True
+Selección aleatoria 18,pct_estrella,7.017543859649122,7.017543859649122,True
 Selección aleatoria 18,popularidad_prom,42.110614035087714,42.110614035087714,True
 Selección aleatoria 18,densidad,0.14535770092822814,0.14535770092822814,True
 Selección aleatoria 18,roi_agregado,,,True
@@ -193,6 +212,7 @@ Selección aleatoria 19,titulos,107.0,107.0,True
 Selección aleatoria 19,calificacion_prom,6.131364583333333,6.131364583333333,True
 Selección aleatoria 19,pct_confiable,80.37383177570094,80.37383177570094,True
 Selección aleatoria 19,pct_alto_engagement,39.25233644859813,39.25233644859813,True
+Selección aleatoria 19,pct_estrella,9.345794392523365,9.345794392523365,True
 Selección aleatoria 19,popularidad_prom,30.497850467289723,30.497850467289723,True
 Selección aleatoria 19,densidad,0.20104251576384014,0.20104251576384014,True
 Selección aleatoria 19,roi_agregado,1.4876910943667025,1.4876910943667025,True
@@ -203,6 +223,7 @@ Selección aleatoria 20,titulos,118.0,118.0,True
 Selección aleatoria 20,calificacion_prom,6.378396226415094,6.378396226415094,True
 Selección aleatoria 20,pct_confiable,67.79661016949152,67.79661016949152,True
 Selección aleatoria 20,pct_alto_engagement,33.89830508474576,33.89830508474576,True
+Selección aleatoria 20,pct_estrella,10.16949152542373,10.16949152542373,True
 Selección aleatoria 20,popularidad_prom,48.79458474576273,48.79458474576273,True
 Selección aleatoria 20,densidad,0.1307193464120829,0.1307193464120829,True
 Selección aleatoria 20,roi_agregado,2.3883797759978362,2.3883797759978362,True
@@ -213,6 +234,7 @@ Selección aleatoria 21,titulos,53.0,53.0,True
 Selección aleatoria 21,calificacion_prom,7.3919487179487176,7.391948717948719,True
 Selección aleatoria 21,pct_confiable,22.641509433962266,22.641509433962266,True
 Selección aleatoria 21,pct_alto_engagement,43.39622641509434,43.39622641509434,True
+Selección aleatoria 21,pct_estrella,0.0,0.0,True
 Selección aleatoria 21,popularidad_prom,88.38398113207546,88.38398113207546,True
 Selección aleatoria 21,densidad,0.08363448470263694,0.08363448470263696,True
 Selección aleatoria 21,roi_agregado,0.12,0.12,True
@@ -223,6 +245,7 @@ Selección aleatoria 23,titulos,4.0,4.0,True
 Selección aleatoria 23,calificacion_prom,5.266666666666667,5.266666666666667,True
 Selección aleatoria 23,pct_confiable,50.0,50.0,True
 Selección aleatoria 23,pct_alto_engagement,50.0,50.0,True
+Selección aleatoria 23,pct_estrella,0.0,0.0,True
 Selección aleatoria 23,popularidad_prom,23.71325,23.71325,True
 Selección aleatoria 23,densidad,0.22209805347924333,0.22209805347924333,True
 Selección aleatoria 23,roi_agregado,0.9543422857142857,0.9543422857142857,True
@@ -233,6 +256,7 @@ Selección aleatoria 24,titulos,9.0,9.0,True
 Selección aleatoria 24,calificacion_prom,7.066666666666666,7.066666666666666,True
 Selección aleatoria 24,pct_confiable,0.0,0.0,True
 Selección aleatoria 24,pct_alto_engagement,11.11111111111111,11.11111111111111,True
+Selección aleatoria 24,pct_estrella,0.0,0.0,True
 Selección aleatoria 24,popularidad_prom,22.036222222222225,22.036222222222225,True
 Selección aleatoria 24,densidad,0.32068412613575625,0.32068412613575625,True
 Selección aleatoria 24,roi_agregado,,,True
@@ -243,6 +267,7 @@ Selección aleatoria 25,titulos,12.0,12.0,True
 Selección aleatoria 25,calificacion_prom,6.4725,6.4725,True
 Selección aleatoria 25,pct_confiable,83.33333333333334,83.33333333333334,True
 Selección aleatoria 25,pct_alto_engagement,41.66666666666667,41.66666666666667,True
+Selección aleatoria 25,pct_estrella,0.0,0.0,True
 Selección aleatoria 25,popularidad_prom,21.962166666666672,21.962166666666672,True
 Selección aleatoria 25,densidad,0.29471135968673395,0.29471135968673395,True
 Selección aleatoria 25,roi_agregado,2.0377076967805285,2.0377076967805285,True
@@ -253,6 +278,7 @@ Selección aleatoria 26,titulos,3.0,3.0,True
 Selección aleatoria 26,calificacion_prom,6.666666666666667,6.666666666666667,True
 Selección aleatoria 26,pct_confiable,66.66666666666666,66.66666666666666,True
 Selección aleatoria 26,pct_alto_engagement,33.33333333333333,33.33333333333333,True
+Selección aleatoria 26,pct_estrella,0.0,0.0,True
 Selección aleatoria 26,popularidad_prom,22.274666666666665,22.274666666666665,True
 Selección aleatoria 26,densidad,0.29929366694600745,0.29929366694600745,True
 Selección aleatoria 26,roi_agregado,0.529851052631579,0.529851052631579,True
@@ -263,6 +289,7 @@ Selección aleatoria 27,titulos,119.0,119.0,True
 Selección aleatoria 27,calificacion_prom,6.808823529411765,6.808823529411765,True
 Selección aleatoria 27,pct_confiable,4.201680672268908,4.201680672268908,True
 Selección aleatoria 27,pct_alto_engagement,26.05042016806723,26.05042016806723,True
+Selección aleatoria 27,pct_estrella,0.8403361344537815,0.8403361344537815,True
 Selección aleatoria 27,popularidad_prom,86.50616806722688,86.50616806722688,True
 Selección aleatoria 27,densidad,0.07870911036216975,0.07870911036216975,True
 Selección aleatoria 27,roi_agregado,,,True
@@ -273,6 +300,7 @@ Selección aleatoria 28,titulos,67.0,67.0,True
 Selección aleatoria 28,calificacion_prom,7.039245614035087,7.039245614035088,True
 Selección aleatoria 28,pct_confiable,47.76119402985074,47.76119402985074,True
 Selección aleatoria 28,pct_alto_engagement,31.343283582089555,31.343283582089555,True
+Selección aleatoria 28,pct_estrella,8.955223880597014,8.955223880597014,True
 Selección aleatoria 28,popularidad_prom,61.48982089552239,61.48982089552239,True
 Selección aleatoria 28,densidad,0.11447822601395276,0.11447822601395277,True
 Selección aleatoria 28,roi_agregado,1.834640878590972,1.834640878590972,True
@@ -283,6 +311,7 @@ Selección aleatoria 29,titulos,16.0,16.0,True
 Selección aleatoria 29,calificacion_prom,6.052444444444444,6.052444444444444,True
 Selección aleatoria 29,pct_confiable,25.0,25.0,True
 Selección aleatoria 29,pct_alto_engagement,12.5,12.5,True
+Selección aleatoria 29,pct_estrella,6.25,6.25,True
 Selección aleatoria 29,popularidad_prom,35.5966875,35.5966875,True
 Selección aleatoria 29,densidad,0.17002830514621464,0.17002830514621464,True
 Selección aleatoria 29,roi_agregado,0.9082748567463516,0.9082748567463516,True
@@ -293,6 +322,7 @@ Selección aleatoria 30,titulos,51.0,51.0,True
 Selección aleatoria 30,calificacion_prom,6.934666666666667,6.934666666666667,True
 Selección aleatoria 30,pct_confiable,33.33333333333333,33.33333333333333,True
 Selección aleatoria 30,pct_alto_engagement,37.254901960784316,37.254901960784316,True
+Selección aleatoria 30,pct_estrella,13.725490196078432,13.725490196078432,True
 Selección aleatoria 30,popularidad_prom,67.67466666666667,67.67466666666667,True
 Selección aleatoria 30,densidad,0.10247064386476476,0.10247064386476476,True
 Selección aleatoria 30,roi_agregado,,,True
