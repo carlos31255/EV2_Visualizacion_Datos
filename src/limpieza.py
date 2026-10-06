@@ -23,6 +23,7 @@ PROC = ROOT / "data" / "processed"
 
 NO_ESP = "No especificado"
 UMBRAL_VOTOS = 10  # mínimo de votos para considerar "confiable" una calificación
+GENERO_FORMATO = "TV Movie"  # es un formato (telefilm), no un género narrativo: se marca y se excluye de la dimensión género
 
 # Homologación de géneros: taxonomía de películas (TMDb movie) y de series (TMDb tv).
 # Clave = género original; valor = género unificado (en español, para la audiencia).
@@ -89,11 +90,8 @@ def limpiar(df: pd.DataFrame) -> pd.DataFrame:
     for col in ["director", "cast", "country", "genres", "description"]:
         df[col] = df[col].fillna(NO_ESP)
 
-    # Eliminar 'TV Movie' porque es un formato, no un género
-    df["genres"] = df["genres"].str.replace(r'\bTV Movie\b,?\s*', '', regex=True).str.replace(r',\s*$', '', regex=True)
-    df.loc[df["genres"] == "", "genres"] = NO_ESP
-
     df["idioma"] = df["language"].map(IDIOMAS).fillna(df["language"])
+    df["es_telefilm"] = df["genres"].str.contains(GENERO_FORMATO, regex=False)   # el texto original de genres no se modifica
 
     # Calificación: 0 con vote_count == 0 es "sin votos", no una nota real.
     df["tiene_votos"] = df["vote_count"] > 0
@@ -130,6 +128,11 @@ def _largo(df, col_origen, col_nuevo):
 
 def tabla_genero(df: pd.DataFrame) -> pd.DataFrame:
     g = _largo(df, "genres", "genero_original")
+    # "TV Movie" sale de la dimensión género; si era el único género del título, queda "No especificado"
+    es_tv = g["genero_original"] == GENERO_FORMATO
+    g_tv, g = g[es_tv], g[~es_tv]
+    solo_tv = g_tv[~g_tv["content_id"].isin(g["content_id"])].assign(genero_original=NO_ESP)
+    g = pd.concat([g, solo_tv], ignore_index=True)
     g["genero_unificado"] = g["genero_original"].map(MAPA_GENEROS).fillna(g["genero_original"])
     g.loc[g["genero_original"] == NO_ESP, "genero_unificado"] = NO_ESP
     # Action + Adventure -> ambos "Acción y Aventura": evitar contar dos veces el mismo título.
@@ -175,6 +178,9 @@ def control_calidad(p_raw, s_raw, s_dups, df, gen, pais, direc) -> pd.DataFrame:
          pais["content_id"].nunique()),
         ("Índice de engagement fuera de 0-100", 0,
          int((~df["indice_engagement"].between(0, 100)).sum())),
+        ("Títulos marcados como telefilm (es_telefilm), excluidos del género", 628, int(df["es_telefilm"].sum())),
+        ("Filas de TV Movie en la tabla de género (deben ser 0)", 0,
+         int((gen["genero_original"] == GENERO_FORMATO).sum())),
     ]
     out = pd.DataFrame(filas, columns=["control", "esperado", "obtenido"])
     out["ok"] = out["esperado"] == out["obtenido"]

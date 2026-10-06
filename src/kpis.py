@@ -5,6 +5,7 @@ Uso desde la raíz del proyecto (después de python src/limpieza.py):
 
 Entradas : data/processed/contenido_unificado.csv, contenido_por_genero.csv, contenido_por_pais.csv
 Salidas  : data/processed/looker_contenido.csv   (tabla única que alimenta Looker Studio)
+           data/processed/looker_genero.csv      (tabla larga para gráficos de género en Looker)
            data/processed/kpis_resumen.csv       (KPIs globales y por tipo)
            data/processed/kpis_por_anio.csv, kpis_por_genero.csv, kpis_por_pais.csv
            data/processed/kpis_verificacion.csv  (cálculo principal vs segunda vía)
