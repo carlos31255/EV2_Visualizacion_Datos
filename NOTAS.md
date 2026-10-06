@@ -238,13 +238,21 @@ Razones:
 
 ---
 
+---
+
+# ENTRADA 08 — Ajustes finales EDA y limpieza (05/10/2026)
+
+**Ajustes realizados y verificados:**
+1. **NB01:** Se reordenó la sección 5 (exportación y QA) y 5b (diccionario de variables) para que queden secuencialmente antes de la sección 6 (resumen de decisiones).
+2. **G8 (NB02):** Se unificó a "Anthony Russo" y "Joe Russo" en "Anthony y Joe Russo", evitando filas duplicadas en el ranking de ROI. El top 1 sigue siendo Chris Renaud con 8,8×.
+3. **G2 (NB02):** Se ajustó el layout del boxplot (*Popularidad sesgada*) desplazando el gráfico hacia la izquierda y colocando las estadísticas de texto a la derecha, fuera del área de trazado, para evitar superposiciones.
+4. **Glosario (`reports/glosario.md`):** Se agregaron las definiciones formales para `% títulos estrella` (`pct_estrella`) y `Popularidad promedio`, reconciliando los 11 KPIs calculados por `src/kpis.py`.
+
+---
+
 # PENDIENTE Y PRIMER PASO
 
 1. **Confirmar la opción B (Entrada 07)** y aplicarla en G3, G4, `kpis_por_genero.csv` y la síntesis antes de tocar Looker.
-2. ~~Ajustes menores~~ **Completados (05/10/2026):**
-   - **NB01:** sección 5 (exportación y controles) y 5b (diccionario de variables) ordenadas de forma secuencial antes de la sección 6 (resumen de decisiones); notebook re-ejecutado sin errores.
-   - **G8 (NB02):** unificada la dupla Anthony y Joe Russo (evita filas duplicadas con idénticas métricas y da entrada a Todd Phillips en el top 10; Chris Renaud se mantiene como líder con 8,8× y 23,5 % de dependencia). Gráfico `images/g8_roi_por_director.png` y notebook re-ejecutados.
-   - **Glosario (`reports/glosario.md`):** agregado `% títulos estrella` (`pct_estrella`) y `Popularidad promedio`, reconciliando los 11 KPIs calculados por `src/kpis.py`.
-3. **Fase 4:** construir el dashboard en Looker conectando `looker_contenido.csv` (refrescar la fuente: trae la columna nueva `es_estrella`); campo calculado `% títulos estrella = SUM(es_estrella) / COUNT(content_id)`. Páginas: (1) resumen con KPIs, (2) catálogo película vs serie, (3) engagement vs calidad, (4) financiero solo películas, (5) cómo leer / limitaciones. Filtros globales: tipo, rango de años, género principal, país, idioma. Antes de cerrar cada página, cruzar 3 cifras con `cifras_clave_eda.csv`.
-4. **Fase 5:** informe PDF (10 secciones; explicar la corrección de ceros en "evaluación crítica") y resumen ejecutivo; incluir `images/infografia_resumen.png`.
-5. **Fase 6:** README (pasos de ejecución, enlace Looker, estructura), `requirements.txt` (no revisados todavía), correr todo desde cero, y **limpieza final de notas y pautas**.
+2. **Fase 4:** Construir el dashboard en Looker conectando `looker_contenido.csv`. Páginas sugeridas: (1) resumen con KPIs, (2) catálogo película vs serie, (3) engagement vs calidad, (4) financiero solo películas, (5) cómo leer / limitaciones.
+3. **Fase 5:** Informe PDF (10 secciones) y resumen ejecutivo; incluir `images/infografia_resumen.png`.
+4. **Fase 6:** README, `requirements.txt`, correr todo desde cero, y limpieza final de notas y pautas.
