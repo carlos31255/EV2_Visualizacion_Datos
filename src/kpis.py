@@ -34,7 +34,7 @@ PAISES_ES = {
     "Czech Republic": "Chequia", "Switzerland": "Suiza", "Colombia": "Colombia", "Austria": "Austria",
     "South Africa": "Sudáfrica", "Finland": "Finlandia", "Portugal": "Portugal", "Indonesia": "Indonesia",
     "Israel": "Israel", "Greece": "Grecia", "New Zealand": "Nueva Zelanda", "Hungary": "Hungría",
-    "Bulgaria": "Bulgaria", "Luxembourg": "Luxemburgo",
+    "Bulgaria": "Bulgaria", "Luxembourg": "Luxemburgo", "United States Minor Outlying Islands": "Islas Menores de EE. UU.", "Puerto Rico": "Puerto Rico", "Taiwan, Province of China": "Taiwán",
 }
 # ---------------------------------------------------------------- tabla para Looker
 def preparar_looker(df, gen, pais):
@@ -55,8 +55,15 @@ def preparar_looker(df, gen, pais):
     out["presupuesto_roi"] = out["budget_clean"].where(fin)    # solo filas con ambos datos
     out["ingresos_roi"] = out["revenue_clean"].where(fin)
     out["financiero_num"] = fin.astype(int)
+
+    # Extraer primer director y unificar hermanos Russo
+    out["director_principal"] = out["director"].str.split(", ").str[0]
+    out["director_principal"] = out["director_principal"].replace(
+        {"Anthony Russo": "Anthony Russo / Joe Russo", "Joe Russo": "Anthony Russo / Joe Russo"}
+    ).fillna(NO_ESP)
+
     cols = ["content_id", "title", "tipo_contenido", "es_pelicula", "release_year", "idioma",
-            "genero_principal", "pais_principal", "popularity", "indice_engagement", "alto_engagement", "es_estrella", "vote_count",
+            "genero_principal", "pais_principal", "director_principal", "popularity", "indice_engagement", "alto_engagement", "es_estrella", "vote_count",
             "vote_average_clean", "confiable_num", "financiero_num", "presupuesto_roi", "ingresos_roi", "roi"]
     return out[cols]
 
