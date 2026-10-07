@@ -40,9 +40,14 @@ Las decisiones gráficas priorizaron la reducción de la carga cognitiva y el r�
 ### 5. Construcción del dashboard interactivo
 El núcleo operacional del proyecto es un dashboard interactivo en Looker Studio, diseñado como una "ventana única" de toma de decisiones.
 
-* **Tarjetas KPI (Overview):** Panel estático de rápido consumo que consolida el total de títulos seleccionados, su peso en el catálogo, la calificación y popularidad típica, y métricas exclusivas como el `% de títulos estrella` (percentil ≥ 75, nota ≥ 7, votos fiables).
-* **Filtros Globales de Control:** Un panel persistente con selectores dinámicos por Tipo de contenido, Año, Género, País e Idioma.
-* **Interactividad y Navegación cruzada:** Cada componente gráfico (líneas de tiempo, barras de top géneros/países, ranking de directores) opera en red. Al interactuar con la barra de un país o director, todos los indicadores (KPIs y gráficas secundarias) recalculan automáticamente los perfiles de rentabilidad, permitiendo a la Gerencia de Contenido profundizar (*drill-down*) instantáneamente en micro-nichos sin romper la consistencia general.
+* **Tarjetas KPI (Overview):** Panel estático de rápido consumo que consolida el total de títulos, calificación, cobertura de votos, alto engagement y métricas exclusivas como el `% de títulos estrella`.
+* **Interactividad y Navegación cruzada:** Panel de filtros globales (Tipo, Año, Género, País, Idioma) que opera en red con todos los componentes, garantizando consistencia técnica en el cálculo de KPIs al profundizar (*drill-down*) en micro-nichos.
+* **Estructura en 5 Páginas Estratégicas:** 
+  1. **Resumen y Tendencias:** Incluye un gráfico de dispersión (Calidad vs Engagement) por género para respaldar visualmente el hallazgo central del informe (la independencia de ambas variables, r=0,25). Adicionalmente, líneas de tiempo desglosadas por tipo de contenido usando la paleta segura para daltónicos.
+  2. **Película vs. Serie:** Comparativa volumétrica y cualitativa. Incorpora la *cobertura de votos fiables* para advertir que el 7,02 de promedio de las series está apoyado en menos del 40 % de su catálogo.
+  3. **Exploración de Categorías:** Top 7 de géneros y países filtrados para excluir el ruido estadístico.
+  4. **Desempeño Financiero:** Foco en directores (con filtros de mínimo 5 películas), exponiendo su recaudación total y su ROI agregado, con tarjetas financieras específicas de cobertura.
+  5. **Metodología y Limitaciones:** Sección declarativa para transparentar los sesgos de visualización adoptados.
 
 ### 6. Narrativa Visual (Data Storytelling)
 La historia que cuentan los datos desafía los supuestos tradicionales de StreamView, organizándose en tres grandes capítulos narrativos:
@@ -56,7 +61,9 @@ La historia que cuentan los datos desafía los supuestos tradicionales de Stream
 La principal solidez del proyecto es la rigurosidad estadística aplicada a la limpieza. Aislar las calificaciones "cero" sin sustento de votos y utilizar medianas/percentiles intragrupos erradicó por completo el sesgo inflacionario, permitiendo conclusiones financieras objetivas.
 
 **Limitaciones y Decisiones Críticas:**
-* **Integridad vs. Granularidad (El Trade-Off del Dashboard):** Dado que un porcentaje mayoritario del catálogo pertenece a múltiples géneros (75 % de películas), la visualización interactiva enfrentaba el riesgo de multiplicar los títulos base en la sumatoria de los KPIs. Para salvaguardar la exactitud financiera y la fluidez de los filtros cruzados (haciendo que 1 título = 1 conteo de ingresos), **se tomó la decisión estratégica de limitar el dashboard en Looker a utilizar exclusivamente el *género principal***. Esto asegura consistencia técnica inquebrantable a costa de subestimar el volumen real de géneros transversales secundarios.
+* **Integridad vs. Granularidad (El Trade-Off del Dashboard):** Dado que un porcentaje mayoritario del catálogo pertenece a múltiples géneros (75 % de películas), la visualización interactiva enfrentaba el riesgo de multiplicar los títulos base en la sumatoria de KPIs. Para salvaguardar la exactitud (haciendo que 1 título = 1 conteo de ingresos), **se limitó el dashboard a utilizar exclusivamente la primera categoría listada (género, país y director principal)**. Esto subestima las apariciones secundarias y asume, sin verificación, que el primer elemento listado es el dominante (ej. el "Drama" baja del 43,2 % de participación real al 22,9 % en películas por este efecto).
+* **Ausencias ("No especificado") y Exclusiones:** Se aislaron volúmenes sustanciales de información ausente: 1.088 títulos sin género, 2.261 sin país, y 11.092 sin director (este último afectando al 68,5 % del catálogo de series). Adicionalmente, 628 películas para televisión ("TV Movie") fueron excluidas del listado de géneros por generar ruido estadístico.
+* **Corte Artificial de Volumen Temporal:** Se detectó que el dataset fue muestreado artificialmente para contener *exactamente* 1.000 títulos por año y tipo de contenido. Esta restricción invalidó por completo el análisis de volúmenes de producción a lo largo del tiempo, forzando a estudiar únicamente las promedios de variables.
 * **Ceguera Financiera de las Series:** La nulidad absoluta de ingresos y costos en el ecosistema de series restringe severamente el cálculo de un ROI unificado para la plataforma.
 
 ### 8. Conclusiones y recomendaciones
