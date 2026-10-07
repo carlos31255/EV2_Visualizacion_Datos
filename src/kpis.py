@@ -35,6 +35,12 @@ PAISES_ES = {
     "South Africa": "Sudáfrica", "Finland": "Finlandia", "Portugal": "Portugal", "Indonesia": "Indonesia",
     "Israel": "Israel", "Greece": "Grecia", "New Zealand": "Nueva Zelanda", "Hungary": "Hungría",
     "Bulgaria": "Bulgaria", "Luxembourg": "Luxemburgo", "United States Minor Outlying Islands": "Islas Menores de EE. UU.", "Puerto Rico": "Puerto Rico", "Taiwan, Province of China": "Taiwán",
+    "Pakistan": "Pakistán", "Malaysia": "Malasia", "Romania": "Rumania", "Ukraine": "Ucrania",
+    "Serbia": "Serbia", "Iran": "Irán", "United Arab Emirates": "Emiratos Árabes Unidos",
+    "Venezuela": "Venezuela", "Singapore": "Singapur", "Slovakia": "Eslovaquia", "Croatia": "Croacia",
+    "Iceland": "Islandia", "Estonia": "Estonia", "Syrian Arab Republic": "Siria", "Vietnam": "Vietnam",
+    "Lebanon": "Líbano", "Peru": "Perú", "Saudi Arabia": "Arabia Saudita", "Lithuania": "Lituania",
+    "Georgia": "Georgia", "Morocco": "Marruecos", "Iraq": "Irak",
 }
 # ---------------------------------------------------------------- tabla para Looker
 def preparar_looker(df, gen, pais):
@@ -56,11 +62,14 @@ def preparar_looker(df, gen, pais):
     out["ingresos_roi"] = out["revenue_clean"].where(fin)
     out["financiero_num"] = fin.astype(int)
 
-    # Extraer primer director y unificar hermanos Russo
-    out["director_principal"] = out["director"].str.split(", ").str[0]
+    # Extraer primer director, unificar hermanos Russo, limpiar espacios y capitalización
+    out["director_principal"] = (out["director"].str.split(r",\s*", regex=True).str[0]
+                                 .str.replace(r"\s+", " ", regex=True).str.strip())
     out["director_principal"] = out["director_principal"].replace(
         {"Anthony Russo": "Anthony Russo / Joe Russo", "Joe Russo": "Anthony Russo / Joe Russo"}
     ).fillna(NO_ESP)
+    dp = out["director_principal"]
+    out["director_principal"] = dp.str.casefold().map(dp.groupby(dp.str.casefold()).agg(lambda s: s.mode().iat[0]))
 
     cols = ["content_id", "title", "tipo_contenido", "es_pelicula", "release_year", "idioma",
             "genero_principal", "pais_principal", "director_principal", "popularity", "indice_engagement", "alto_engagement", "es_estrella", "vote_count",
