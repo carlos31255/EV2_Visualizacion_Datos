@@ -62,7 +62,7 @@ requirements.txt
 | D1 | Dashboard en Looker Studio | Cerrada |
 | D2 | Notebooks solo para gráficos de análisis; el dashboard no se construye en código | Cerrada |
 | D3 | Los ceros de calificación de EP1 no son notas: se corrigen y se declara en el informe | Cerrada |
-| D4 | Género en Looker: dos fuentes SIN mezclarlas. `looker_contenido.csv` (KPIs de portada, usa `genero_principal`) y `looker_genero.csv` (todos los gráficos de género, tabla larga, igual base que G3 y G4). Una entrada anterior recomendaba la opción B (género principal en todo, también G3 y G4) | Aplicada en el código; falta confirmación explícita del usuario de que descarta B (ver sección 6) |
+| D4 | Opción para gráficos de género en Looker: usar exclusivamente `genero_principal` (Opción A, `looker_contenido.csv`) para todo el dashboard, en vez de la tabla larga (`looker_genero.csv`). | Cerrada (se usa A) a favor de la integridad de los filtros (IE14) y los KPIs (IE18). |
 | D5 | Porcentajes de KPIs bajo filtro = Σ numerador ÷ registros de la selección. G4 y G6 (estáticos) usan base fija = total del tipo. Ambas son decisiones del equipo, no requisitos de la docente | Cerrada |
 | D6 | KPIs: se elimina "engagement promedio" (vale 50 por construcción), "densidad" y "popularidad promedio" (ya no se usan en ningún gráfico). Se agrega "% alto engagement" y "% estrella" | Cerrada |
 | D7 | G3 usa la mediana del índice de engagement por género. Verificar si Looker permite mediana; si no, precalcular tabla por género como fuente de ese gráfico | Abierta (verificar en Fase 4) |
@@ -72,10 +72,9 @@ requirements.txt
 | D11 | «TV Movie» es un formato (telefilm), no un género: se marca en `es_telefilm` (628 títulos, 3,9 % de las películas) y se excluye de la dimensión género sin borrar el texto original de `genres`. Si era el único género (1 título), queda «No especificado» | Cerrada (responde al comentario IE5 de EP1 sobre categorías que no son géneros) |
 
 ### 1.3 Pendientes (en orden)
-1. Confirmar D4 con el usuario.
-2. Fase 4: construir el dashboard en Looker (sección 6).
-3. Fase 5: informe PDF (10 secciones), resumen ejecutivo e infografía (sección 7).
-4. Fase 6: README, `requirements.txt`, correr todo desde cero, limpieza final (sección 8).
+1. Fase 4: construir el dashboard en Looker (sección 6).
+2. Fase 5: informe PDF (10 secciones), resumen ejecutivo e infografía (sección 7).
+3. Fase 6: README, `requirements.txt`, correr todo desde cero, limpieza final (sección 8).
 
 ---
 
@@ -218,7 +217,7 @@ Tras D11 (telefilms), las cifras G1–G8 de `cifras_clave_eda.csv` no cambian (v
 
 Además `kpis_resumen.csv` trae `pct_del_catalogo` (base fija 31.991).
 
-**Límites y riesgos:** "% alto engagement" y "% estrella" son casi constantes en el catálogo completo; solo son informativos al filtrar por género, país o año. Los KPIs de la portada y los gráficos de género usan criterios distintos de género (D4): declararlo siempre.
+**Límites y riesgos:** "% alto engagement" y "% estrella" son casi constantes en el catálogo completo; solo son informativos al filtrar por género, país o año. Al usar solo el género principal en Looker (D4), los géneros secundarios quedan subrepresentados en volumen. Esto debe declararse siempre en la página de limitaciones.
 
 **Pendiente:**
 1. Actualizar `glosario.md`: quitar densidad y popularidad promedio; agregar la fila de "% estrella"; incluir la sección "Diferencia entre fuentes" (sección 6).
@@ -236,14 +235,13 @@ Además `kpis_resumen.csv` trae `pct_del_catalogo` (base fija 31.991).
 1. Fuente A `looker_contenido.csv`: KPIs de la portada y gráficos por tipo, año, idioma y país. Fuente B `looker_genero.csv`: todos los gráficos de género (misma base que G3 y G4). No se mezclan por `content_id` (un cruce uno-a-muchos inflaría los SUM/COUNT de la fuente A).
 2. Fórmulas de los KPIs en Looker: Títulos `COUNT_DISTINCT(content_id)`; % del catálogo `COUNT_DISTINCT(content_id)/31991`; Calificación promedio `AVG(vote_average_clean)`; % con votos suficientes `SUM(confiable_num)/COUNT(content_id)`; % alto engagement `SUM(alto_engagement)/COUNT(content_id)`; % estrella `SUM(es_estrella)/COUNT(content_id)`; ROI agregado `SUM(ingresos_roi)/SUM(presupuesto_roi)`; Cobertura financiera `SUM(financiero_num)/SUM(es_pelicula)`.
 3. Páginas: (1) resumen con KPIs, (2) catálogo película vs serie, (3) engagement vs calidad, (4) financiero (solo películas), (5) cómo leer / limitaciones. Filtros globales en el mismo lugar en todas las páginas: tipo, rango de años, idioma, género, país.
-4. Reglas para cada gráfico de categorías (D10): revisar en la interfaz que no agrupe el resto en "Otros" (en gráficos tipo torta/donut Looker puede mostrar un segmento "Otros"; verificar la opción en el editor y desactivarla), limitar el Top N, y filtrar "No especificado". La fuente A (`looker_contenido.csv`) incluye "No especificado" (1.087 títulos por género principal, 2.261 por país); la fuente B ya lo excluye.
+4. Reglas para cada gráfico de categorías (D10): revisar en la interfaz que no agrupe el resto en "Otros" (en gráficos tipo torta/donut Looker puede mostrar un segmento "Otros"; verificar la opción en el editor y desactivarla), limitar el Top N, y filtrar "No especificado". La fuente A (`looker_contenido.csv`) incluye "No especificado" (1.088 títulos por género principal, 2.261 por país); la fuente B ya lo excluye.
 
 **Cifras:** `control_g4_vs_looker.csv` — Drama 43,2 % películas / 49,1 % series (todos los géneros del título, G4 y fuente B) frente a 22,9 % / 31,5 % (solo `genero_principal`, fuente A); Acción y Aventura en películas 26,0 % vs 14,2 %.
 
 **Límites y riesgos (declarar en la página 5):**
-- Los KPIs de la portada cuentan solo el género principal (primero listado); los gráficos de género cuentan todos los géneros. 76 % de las películas y 57 % de las series tienen 2 o más géneros (promedio 2,28 y 1,82). Que el primero listado sea el género dominante no está verificado.
-- Objeción registrada a D4 (a favor de la opción B): con la tabla larga los porcentajes por género no suman 100 % y, al filtrar por varios géneros, un título cuenta más de una vez; además hay dos criterios de género en la misma pantalla. Mitigación: rotular cada gráfico ("todos los géneros del título" vs "género principal") y declarar la diferencia.
-- **Hueco abierto:** `looker_genero.csv` no tiene país, así que el filtro de país no afecta los gráficos de género; y el filtro de género solo afecta los gráficos de la fuente B y los KPIs de la fuente A que usen `genero_principal`. IE14 pide filtros que afecten todos los gráficos: decidir si agregar `pais_principal` a `looker_genero.csv` y cómo rotular los controles.
+- Los KPIs de la portada cuentan solo el género principal (primero listado); los gráficos de género cuentan todos los géneros. 75 % de las películas y 57 % de las series tienen 2 o más géneros (promedio 2,25 y 1,87 sobre la tabla larga sin 'No especificado' ni telefilms). Que el primero listado sea el género dominante no está verificado.
+- **Decisión D4 (Integridad vs Granularidad):** Se descarta el uso de la tabla larga de géneros en Looker. Para cumplir con el indicador IE14 (filtros globales sin quiebres) e IE18 (KPIs correctamente calculados sin multiplicaciones), todo el dashboard consumirá `looker_contenido.csv` usando `genero_principal` y `pais_principal`. La pérdida de volumen en géneros secundarios transversales como el Drama se justificará en el informe y en la página de limitaciones como una decisión consciente en pro de la consistencia visual (IE6) y matemática.
 - Comprobar en Looker si existe `MEDIAN` (D7); si no, precalcular una tabla por género con la mediana del engagement.
 - Verificar que cada gráfico de Looker muestre la misma métrica, orden y cifras que `cifras_clave_eda.csv` (el fallo de EP1).
 - Verificación en vivo obligatoria (IE9): publicar el dashboard, abrir el enlace en ventana de incógnito, y comparar 3 cifras por gráfico con `cifras_clave_eda.csv` y con el informe. Que texto y gráfico coincidan es la causa de los comentarios IE6 e IE9 de EP1.
@@ -300,6 +298,8 @@ Además `kpis_resumen.csv` trae `pct_del_catalogo` (base fija 31.991).
 
 ## 10. REGISTRO DE CAMBIOS (más reciente arriba; una línea por cambio)
 
+- 06/10/2026 — D4 cerrada: se descarta usar `looker_genero.csv` en Looker Studio a favor de la Opción A (`looker_contenido.csv` con género principal) para garantizar la integridad de los filtros cruzados (IE14) y los cálculos de KPIs (IE18).
+- 06/10/2026 — Verificación en copia aparte con limpieza.py y kpis.py subidos: 17/17 controles, 300/300 + 9/9 en KPIs; cifras de la sección 6 revisadas, dos ajustes menores (secciones 6 y 10).
 - 06/10/2026 — Revisión de cuadernos completada: se verificó que todas las decisiones de integración/limpieza (NB01) y la elección de cada gráfico G1-G8 (NB02) cuentan con su respectiva justificación documentada (secciones 4 y 5 del NB01, y viñetas 'Por qué' en NB02).
 - 06/10/2026 — Verificación con datos reales: limpieza.py 17/17, kpis.py 300/300 + 9/9, NB01 y NB02 sin errores (8 PNG); se detectan correcciones de texto en NOTAS.md (1.1: 15→17 controles y 301→300 comparaciones; duplicado y truncado en sección 3; ruta de glosario), en glosario.md (22,7→22,9 % y fila % estrella) y solapamiento de etiquetas en G3 (secciones 1, 3, 4, 5 y 9).
 - 06/10/2026 — D11: «TV Movie» se marca con `es_telefilm` (628 títulos) y se excluye de la dimensión género sin borrar el texto de `genres`; `limpieza.py` pasa a 17 controles, `kpis.py` a 300/300; cifras G1–G8 sin cambios; NB01 actualizado (celdas 15, 16, 17 y 21) (secciones 1.1, 1.2, 3, 4, 5 y 6).
