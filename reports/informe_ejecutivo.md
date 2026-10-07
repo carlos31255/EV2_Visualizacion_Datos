@@ -20,6 +20,7 @@ La información se construyó a partir de dos fuentes crudas: `netflix_movies_de
 * **Normalización de Engagement:** Debido a que la escala de popularidad difería radicalmente (mediana de 10,9 en películas vs. 36,2 en series), se generó un `indice_engagement` (percentil de 0 a 100 intrapolo) para permitir comparativas justas.
 * **Control de Géneros (Data Quality):** Se homologaron las dos taxonomías dispares de las fuentes originales a un mapa de géneros único en español. Adicionalmente, se extrajeron 628 títulos catalogados como "TV Movie", marcándolos como `es_telefilm` y excluyéndolos de la dimensión de géneros al tratarse de un formato y no de un atributo narrativo.
 * **Salud Financiera:** Se aislaron 3.540 películas con datos no nulos en ingresos y presupuesto para el cálculo seguro del Retorno de Inversión (ROI).
+* **Arquitectura de Salida (Data Marts):** El flujo de datos produce un archivo maestro aplanado (`looker_contenido.csv`) optimizado exclusivamente para alimentar el dashboard interactivo sin inflar los cálculos financieros. Como respaldo, el pipeline exporta un conjunto de tablas complementarias (`kpis_genero.csv`, `kpis_pais.csv`, etc.) que actúan como archivos de control (QA) para auditar matemáticamente los resultados visualizados en el dashboard.
 
 ### 3. Análisis exploratorio mediante visualizaciones
 La exploración previa permitió identificar los patrones fundamentales que rigen la estrategia de visualización:
