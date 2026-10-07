@@ -4,7 +4,7 @@ Este repositorio contiene el pipeline completo de datos, análisis exploratorio 
 
 ## 🔗 Dashboard Interactivo
 
-👉 **[PEGAR_AQUI_LINK_LOOKER_STUDIO]** 👈
+**[https://datastudio.google.com/reporting/598793da-33a9-405f-86dc-8e0d717c4835]**
 
 ---
 
@@ -65,16 +65,18 @@ Para reproducir el pipeline completo desde cero y regenerar todos los CSVs y gr�
 
 ---
 
-## 📊 Especificación Técnica del Dashboard (Looker Studio)
+## 📊 Entregables en Looker Studio
 
-El dashboard ha sido diseñado bajo los principios de reducción de carga cognitiva, operando como una ventana de navegación interconectada.
+Ambos entregables se construyen conectando de forma exclusiva la tabla maestra `data/processed/looker_contenido.csv`.
 
-### Controles Globales (Transversales a las 5 páginas)
+### 1. Dashboard Interactivo
+Diseñado bajo los principios de reducción de carga cognitiva, operando como una ventana de exploración multidimensional.
+
+**Controles Globales (Transversales a las 5 páginas)**
 * **Listas desplegables:** `tipo_contenido`, `genero_principal`, `pais_principal`, `idioma`.
 * **Rango numérico:** `release_year`.
 
-### Tarjetas KPI (Fila superior global)
-Reaccionan dinámicamente a los filtros. Fórmulas configuradas en Looker:
+**Tarjetas KPI (Fila superior global)**
 * **Total Títulos:** `COUNT_DISTINCT(content_id)`
 * **% del Catálogo:** `COUNT_DISTINCT(content_id) / 31991` *(Denominador base fijo).*
 * **Calificación Promedio:** `AVG(vote_average_clean)`
@@ -82,20 +84,27 @@ Reaccionan dinámicamente a los filtros. Fórmulas configuradas en Looker:
 * **% Alto Engagement:** `SUM(alto_engagement) / COUNT_DISTINCT(content_id)`
 * **% Títulos Estrella:** `SUM(es_estrella) / COUNT_DISTINCT(content_id)`
 
-### Estructura de Páginas
+**Estructura de Páginas**
+1. **Resumen y Tendencias:** Dispersión (Calidad vs Engagement) por `genero_principal`. Líneas de tiempo desglosadas por `tipo_contenido`.
+2. **Película vs. Serie:** Gráficos de barras comparativos de volumen, calidad y cobertura de votos fiables.
+3. **Exploración por Categorías:** Top 7 de géneros y Top 7 de países por volumen (excluyendo "No especificado").
+4. **Desempeño Financiero (Directores):** Tabla Top 10 directores (`director_principal`) ordenados por ingresos. Filtro interno: `financiero_num = 1` y mínimo 5 películas.
+5. **Metodología y Limitaciones:** Texto declarando los sesgos del dataset.
 
-1. **Resumen y Tendencias:**
-   * Gráfico de dispersión (Calidad vs Engagement) por `genero_principal`.
-   * Líneas de tiempo desglosadas por `tipo_contenido` mostrando la evolución del Engagement y Calidad. (Uso de paleta daltónica: Películas Azul `#0072B2`, Series Naranja `#E69F00`).
-2. **Película vs. Serie:**
-   * Gráficos de barras comparativos de volumen y calidad.
-   * Gráfico de barras de **Cobertura de votos fiables**, vital para evidenciar la fragilidad del puntaje promedio de las series.
-3. **Exploración por Categorías:**
-   * Top 7 de géneros por cantidad de títulos.
-   * Top 7 de países por cantidad de títulos, con línea de calidad promedio cruzada. (Excluyendo "No especificado" en ambos casos).
-4. **Desempeño Financiero (Directores):**
-   * Tabla con el Top 10 directores (`director_principal`) ordenados por ingresos.
-   * Filtro interno obligatorio: `financiero_num = 1` y mínimo 5 películas (`COUNT_DISTINCT(content_id) >= 5`).
-   * Incluye tarjetas financieras exclusivas de esta página: Cobertura Financiera y ROI Agregado global.
-5. **Metodología y Limitaciones:**
-   * Página de texto declarando los sesgos del dataset (ej: 628 telefilms excluidos, "No especificados", límite artificial de 1.000 títulos/año, ceguera financiera de las series).
+### 2. Infografía (Resumen Ejecutivo)
+Diseñada como una narrativa visual estática (Data Storytelling). No posee filtros dinámicos. Incluye textos conclusivos fijos integrados al diseño.
+
+*   **Gráfico 1: "Muy visto no garantiza buena nota"**
+    *   **Configuración:** Dispersión. Eje X (`vote_average_clean`, Promedio), Eje Y (`indice_engagement`, Mediana). Dimensión: `genero_principal`.
+    *   **Filtros fijos:** `es_pelicula = 1`. Excluir `genero_principal` = "No especificado".
+    *   **Nota al pie:** "Cada punto es un género principal (calidad promedio, engagement mediano)".
+*   **Gráfico 2: "Drama frente a espectáculo"**
+    *   **Configuración:** Dos gráficos de barras alineados horizontalmente. Dimensión en ambos: `genero_principal` (Limitado a: Drama, Comedia, Acción y Aventura, Terror, Animación, Ciencia ficción y Fantasía).
+    *   **Métricas:** Gráfico A (Volumen) usa conteo de títulos. Gráfico B (Engagement) usa `indice_engagement` (Mediana o Promedio).
+    *   **Filtros fijos:** `es_pelicula = 1`.
+    *   **Nota al pie:** "Como género principal, el Drama es el 22,9 % de las películas; considerando todos sus géneros, aparece en el 43,2 %".
+*   **Gráfico 3: "Entre los de mayor recaudación"**
+    *   **Configuración:** Tabla de barras mostrando 10 filas. Dimensión: `director_principal`.
+    *   **Métricas:** `SUM(ingresos_roi) / SUM(presupuesto_roi)`. Orden descendente por Ingresos Totales.
+    *   **Filtros fijos:** `financiero_num = 1` y `COUNT_DISTINCT(content_id) >= 5`.
+    *   **Nota al pie:** "ROI agregado = ingresos ÷ presupuesto; mínimo 5 películas con datos; primer director listado por título".
