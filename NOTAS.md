@@ -1,312 +1,216 @@
 # NOTAS DEL PROYECTO — EP3 ADY1104 Visualización de Datos (StreamView Analytics)
 
-Archivo único de traspaso entre agentes: `notas/NOTAS.md`. Última consolidación: 06/10/2026.
+Última actualización: 07/10/2026.
 
 ---
 
-## 0. REGLAS PARA AGENTES (leer y respetar siempre)
+## 0. REGLAS PARA AGENTES
 
-**Estructura obligatoria.** Este archivo tiene SIEMPRE las secciones 0 a 10, con esa numeración y ese orden. Cada sección de fase (3 a 8) usa SIEMPRE los mismos bloques, en este orden: **Estado · Archivos · Decisiones · Cifras · Límites y riesgos · Pendiente**. No inventes secciones nuevas ni cambies la numeración; si un bloque no aplica, escribe "—".
+1. No hacer commits sin permiso explícito del usuario.
+2. Revisar = solo leer y reportar. No editar sin confirmación.
+3. Las cifras llevan su valor exacto y su fuente. Si cambia una cifra, corrígela donde aparece; nunca dejar versiones viejas.
+4. Antes de dar algo por hecho, verificar con los datos reales (`src/` y notebooks).
+5. Todo debe re-ejecutarse sin modificaciones: rutas relativas a la raíz, sin rutas absolutas.
+6. Si tu trabajo contradice una decisión registrada, anótalo y pide confirmación al usuario.
 
-**Cómo actualizar (al terminar cualquier trabajo):**
-1. Edita la sección afectada en su lugar. No agregues entradas al final ni dupliques texto: la información vive en un solo lugar.
-2. Actualiza la tabla 1.1 (estado de fases), la 1.2 (decisiones) y la 1.3 (pendientes) si cambiaron.
-3. Agrega UNA línea al registro de la sección 10 (fecha, qué cambió, secciones tocadas). Lo más reciente va arriba.
-4. Si cambia una decisión, modifica su fila en 1.2 (mismo ID); no crees una decisión nueva para la misma pregunta.
-5. Las cifras llevan su valor exacto y la fuente (archivo o celda). Si una cifra cambia, corrígela donde aparece; nunca dejes versiones viejas.
-6. Antes de dar algo por hecho, verifica con los datos reales (re-ejecutar `src/` y los notebooks). Registra lo verificado y lo NO verificado.
-7. No atribuyas a la docente reglas que no estén en su retroalimentación (sección 2). Las decisiones de diseño son del equipo.
-8. Todo debe re-ejecutarse sin modificaciones: rutas relativas a la raíz, sin rutas absolutas ni pasos manuales.
-9. Si tu trabajo contradice una decisión registrada en 1.2, no la cambies en silencio: anótalo como riesgo y pide confirmación al usuario.
-
-**Entrega de contenido al usuario:** texto plano para pegar a mano, no modificaciones directas de sus archivos (preferencia del usuario). Pedir confirmación antes de avanzar de fase.
-
-**Estructura de carpetas (raíz `EP3_visualizacion_datos/`):**
-
+**Estructura de carpetas:**
 ```
-data/raw/         CSV originales (no se modifican)
-data/processed/   datasets limpios, tablas largas y agregados (los genera src/)
-notebooks/        01_integracion_y_limpieza, 02_eda_visualizaciones
-src/              limpieza.py, kpis.py, infografia.py
-dashboard/        capturas, PDF exportado y especificación del dashboard Looker
-images/           gráficos estáticos (PNG) usados en informe y resumen
-reports/          informe ejecutivo (PDF), resumen ejecutivo (PDF/PPTX)
-glosario.md       glosario de KPIs (en la raíz del proyecto, archivo aparte)
-notas/NOTAS.md    este archivo
+data/raw/           CSV originales (no se modifican)
+data/processed/     datasets limpios y KPIs (los genera src/)
+notebooks/          01_integracion_y_limpieza, 02_eda_visualizaciones
+src/                limpieza.py, kpis.py
+dashboard/          capturas, PDF exportado
+images/             gráficos PNG (usados en informe)
+reports/            informe_ejecutivo.md
+glosario.md
 README.md
 requirements.txt
 ```
 
-**LIMPIEZA FINAL OBLIGATORIA antes de entregar:** eliminar `NOTAS.md`, cualquier `.md` de contexto interno para agentes y las pautas en PDF. La entrega contiene solo los entregables oficiales.
+**LIMPIEZA FINAL antes de entregar:** eliminar NOTAS.md y las pautas en PDF. La entrega contiene solo los entregables oficiales.
 
 ---
 
-## 1. ESTADO ACTUAL (leer primero)
+## 1. ESTADO ACTUAL
 
 ### 1.1 Fases
 
-| Fase | Estado | Indicador |
-|---|---|---|
-| 0 Estructura de carpetas | Hecha | IE22 |
-| 1 Integración y limpieza (`src/limpieza.py`, NB01) | Hecha. 17 controles OK (verificado 06/10) | IE16 |
-| 2 EDA y gráficos estáticos (NB02, G1–G8) | Hecha. NB02 corre sin errores, 8 PNG (verificado 06/10) | IE13 |
-| 3 KPIs (`src/kpis.py`, `glosario.md`) | Hecha: 300/300 comparaciones (verificado 06/10), glosario.md finalizado | IE18 |
-| 4 Dashboard en Looker Studio | PENDIENTE | IE14, IE17 |
-| 5 Informe PDF + resumen ejecutivo + infografía | PENDIENTE | IE13, IE17 |
-| 6 Empaquetado, README, requirements, QA, limpieza de notas | PENDIENTE | IE22 |
+| Fase | Estado |
+|------|--------|
+| 0 Estructura | ✅ Hecha |
+| 1 Integración y limpieza (`limpieza.py`, NB01) | ✅ Hecha — 17/17 controles OK (verificado 06/10) |
+| 2 EDA y gráficos G1–G8 (NB02) | ✅ Hecha — 8 PNG, sin errores (verificado 06/10) |
+| 3 KPIs (`kpis.py`, `glosario.md`) | ✅ Hecha — 300/300 comparaciones, glosario finalizado |
+| 4 Dashboard en Looker Studio | ⏳ PENDIENTE |
+| 5 Informe PDF + resumen ejecutivo | ⏳ PENDIENTE — borrador en `reports/informe_ejecutivo.md` |
+| 6 README, requirements, QA final, limpieza | ⏳ PENDIENTE |
 
 ### 1.2 Decisiones
 
 | ID | Decisión | Estado |
-|---|---|---|
-| D1 | Dashboard en Looker Studio | Cerrada |
-| D2 | Notebooks solo para gráficos de análisis; el dashboard no se construye en código | Cerrada |
-| D3 | Los ceros de calificación de EP1 no son notas: se corrigen y se declara en el informe | Cerrada |
-| D4 | Opción para gráficos de género en Looker: usar exclusivamente `genero_principal` (Opción A, `looker_contenido.csv`) para todo el dashboard, en vez de la tabla larga (`looker_genero.csv`). | Cerrada (se usa A) a favor de la integridad de los filtros (IE14) y los KPIs (IE18). |
-| D5 | Porcentajes de KPIs bajo filtro = Σ numerador ÷ registros de la selección. G4 y G6 (estáticos) usan base fija = total del tipo. Ambas son decisiones del equipo, no requisitos de la docente | Cerrada |
-| D6 | KPIs: se elimina "engagement promedio" (vale 50 por construcción), "densidad" y "popularidad promedio" (ya no se usan en ningún gráfico). Se agrega "% alto engagement" y "% estrella" | Cerrada |
-| D7 | G3 usa la mediana del índice de engagement por género. Verificar si Looker permite mediana; si no, precalcular tabla por género como fuente de ese gráfico | Abierta (verificar en Fase 4) |
-| D8 | Formato del resumen ejecutivo: PDF o PPTX | Abierta |
-| D9 | Integrantes: ¿los mismos de EP1 (Carlos Hidalgo, Gabriel Caroca, Bruno Miranda, Keiny Navarro)? | Abierta |
-| D10 | Gráficos de categorías en Looker (género, país, idioma): solo categorías reales, Top N explícito en el título, sin barra "Otros", sin "No especificado" (su cantidad se declara en la página de limitaciones). El título del gráfico y el texto deben coincidir con lo que se ve | Cerrada (responde a los comentarios IE5, IE6 e IE9 de EP1) |
-| D11 | «TV Movie» es un formato (telefilm), no un género: se marca en `es_telefilm` (628 títulos, 3,9 % de las películas) y se excluye de la dimensión género sin borrar el texto original de `genres`. Si era el único género (1 título), queda «No especificado» | Cerrada (responde al comentario IE5 de EP1 sobre categorías que no son géneros) |
+|----|----------|--------|
+| D1 | Dashboard en Looker Studio | ✅ Cerrada |
+| D2 | Notebooks solo para gráficos de análisis; dashboard no se construye en código | ✅ Cerrada |
+| D3 | Los ceros de calificación de EP1 no son notas: se corrigen y declara en el informe | ✅ Cerrada |
+| D4 | Dashboard usa exclusivamente `looker_contenido.csv` (una fila por título) con `genero_principal`, `pais_principal` y `director_principal`. Asegura integridad de filtros (IE14) y KPIs (IE18). La pérdida de géneros secundarios se declara en la página 5 del dashboard. | ✅ Cerrada |
+| D5 | KPIs bajo filtro = Σ numerador ÷ COUNT registros. `% del catálogo` usa denominador fijo 31.991. G4 y G6 usan base fija = total del tipo | ✅ Cerrada |
+| D6 | Se elimina "engagement promedio" (vale 50 por construcción). KPIs usados: `% alto engagement` y `% estrella` | ✅ Cerrada |
+| D7 | G3 usa mediana del índice de engagement. Si Looker no permite MEDIAN, precalcular tabla auxiliar | ⏳ Abierta — verificar en Fase 4 |
+| D8 | Formato del resumen ejecutivo: PDF o PPTX | ⏳ Abierta |
+| D9 | Integrantes: los mismos de EP1 (Carlos Hidalgo, Gabriel Caroca, Bruno Miranda, Keiny Navarro) | ⏳ Confirmar |
+| D10 | Gráficos de categorías en Looker: solo categorías reales, Top N en el título, sin barra "Otros", sin "No especificado" | ✅ Cerrada |
+| D11 | "TV Movie" es formato, no género: se marca con `es_telefilm` (628 títulos) y se excluye de la dimensión género | ✅ Cerrada |
 
 ### 1.3 Pendientes (en orden)
-1. Fase 4: construir el dashboard en Looker (sección 6).
-2. Fase 5: informe PDF (10 secciones), resumen ejecutivo e infografía (sección 7).
-3. Fase 6: README, `requirements.txt`, correr todo desde cero, limpieza final (sección 8).
+1. **Fase 4:** construir el dashboard en Looker Studio (ver especificación en sección 6).
+2. **Fase 5:** convertir `reports/informe_ejecutivo.md` a PDF con portada y formato final.
+3. **Fase 6:** README, `requirements.txt`, correr todo desde cero, limpieza final.
 
 ---
 
 ## 2. CONTEXTO Y REQUISITOS
 
-**Encargo:** grupal, caso StreamView Analytics, ahora películas + series. Ponderación 9 %, semana 11. La pauta dice 2 h en la tabla y 3 h en el texto (irrelevante para el producto).
+**Encargo:** grupal, caso StreamView Analytics (películas + series). Ponderación 9 %, semana 11.
 
-**Entregables (6):** (1) informe ejecutivo PDF con 10 secciones (problema de negocio, objetivos, audiencia y propósito comunicacional, fuentes de datos, EDA con visualizaciones, justificación de gráficos, data storytelling, diseño del dashboard, evaluación crítica, conclusiones y recomendaciones); (2) dashboard interactivo con visualizaciones, KPIs, filtros y navegación; (3) resumen ejecutivo PDF/PPTX; (4) archivos documentados y reproducibles; (5) datasets y complementarios para re-ejecutar sin modificaciones; (6) carpeta profesional (`data/, notebooks/, dashboard/, images/, src/, README.md`). La pauta pide además indicar las variables relevantes de las fuentes.
-
-**Rúbrica:**
-
-| Indicador | Peso | Implicancia |
-|---|---|---|
-| IE18 KPIs pertinentes y bien calculados | 26 % | Pocos KPIs, justificados, cálculo verificable |
-| IE17 Dashboards e infografías claros y alineados al negocio | 21 % | Diseño por página + una infografía/resumen visual |
-| IE16 Integra múltiples fuentes con consistencia y calidad | 17 % | Unir movies + tv sin errores |
-| IE14 Visualizaciones interactivas | 15 % | Filtros que afecten todos los gráficos y KPIs |
-| IE13 Visualizaciones estáticas con herramientas especializadas | 11 % | Gráficos claros y consistentes con el objetivo |
-| IE22 Organiza los productos finales | 10 % | Estructura, README, reproducibilidad |
-
-**Retroalimentación REAL de la docente en EP1:**
-1. **IE9 — enlace pendiente:** el enlace al dashboard quedó como placeholder ("[pegar aquí la URL...]"); no se pudo verificar la experiencia completa para las audiencias declaradas.
-2. **IE9 — coherencia dashboard–informe:** el gráfico de géneros del dashboard en vivo no coincidía con notebook e informe (Drama dominando). Rompe la coherencia entre lo que vería Dirección Ejecutiva y la conclusión que el informe le pide creer.
-3. **IE6 — carga cognitiva:** una barra "Otros" en el dashboard en vivo contradice lo que dice el texto y lo que muestra el gráfico; genera confusión para quien solo mira el dashboard.
-4. **IE5 — codificación visual:** el mismo gráfico incluía categorías que no son géneros; afecta la limpieza de la codificación visual.
-5. Puntajes: IE5 atributos visuales 12,8/16 e IE6 carga cognitiva 16/20, ambos "Buen desempeño". Meta en EP3: "Muy buen desempeño".
-
-Reglas como "base fija", "ordenar por densidad", "ROI por director" o "boxplot con IQR" son decisiones del equipo, no requisitos de la docente.
-
-**Lección de "Top géneros" (EP1):** el notebook ordenaba por densidad pero dibujaba la longitud con la cantidad de títulos; en Looker el gráfico incluía una barra "Otros" y categorías que no eran géneros. Hipótesis (no verificada): "Otros" era la barra más larga y por eso Drama no aparecía dominando. Regla vigente: **una métrica, un criterio** (lo que ordena = lo que mide la barra = lo que dice el título), con **solo categorías reales** y **sin barra "Otros"**. En el dashboard, cada gráfico debe mostrar la misma métrica, orden y cifras que su equivalente en `data/processed/cifras_clave_eda.csv`.
-
-
-**Checklist de diseño (IE5/IE6), en gráficos y dashboard:** Película = azul `#0072B2`, Serie = naranja `#E69F00` (Okabe-Ito, aptos para daltonismo; contraste de texto mínimo 4,5:1) en todo el proyecto; gris para lo no destacado; barras desde cero; escala log solo con aviso; sin 3D; título = mensaje; máximo 5–7 categorías mostradas como "Top N" rotulado en el título (sin barra "Otros" ni categorías que no sean del eje: excluir "No especificado" y declarar su cantidad en la página de limitaciones); rotular directo; filtros en el mismo lugar en todas las páginas; KPIs arriba y detalle abajo; página breve de "cómo leer / limitaciones".
-
-**Contexto de las fuentes y de EP1:**
-- Crudos: películas 16.000 × 18 columnas; series 16.000 × 16 (15.991 `show_id` únicos, sin `budget` ni `revenue`); exactamente 1.000 títulos por año en cada una. `duration` vacía (películas) o constante (series); `rating` idéntica a `vote_average`.
-- Nulos originales (películas / series): director 0,8 % / 68,5 %; description 0,8 % / 20 %; country 2,9 % / 11,2 %; genres 0,7 % / 6,1 %.
-- 514–528 títulos tienen el mismo nombre en ambos archivos (p. ej. una película y su serie): no son duplicados, se separan por `tipo_contenido`. Solo 8 géneros coinciden literalmente entre las dos taxonomías.
-- Base EP1: solo películas (16.000, 2010–2025), `popularity` como proxy de engagement y `vote_average`/`vote_count` como calificación. Entregables EP1: `01_limpieza_y_eda_streamview.ipynb`, `informe_ejecutivo_streamview.docx`, dashboard en Looker. Sus 7 hallazgos: quiebre 2021, Drama vs Adventure/Animation, correlación 0,071, directores por ingresos, ROI mediano 1,70×, EE. UU./Japón, 78 % sin datos financieros.
-- Artefacto de EP1 por los ceros: el "1,71 en 2025" de calificación era en gran parte ceros sin votos (73,5 % de las películas de 2025 tienen 0 votos). Sin ceros, 2025 queda en 6,45 (películas) y 7,31 (series). La correlación de EP1 (0,071 y 0,052) usaba esos ceros; la corregida es r = 0,246 y 0,133 (G7).
+**Retroalimentación de EP1 (comentarios que generaron decisiones):**
+- IE5/IE6: gráfico de géneros mezclaba barra "Otros" y categorías que no eran géneros → D10, D11.
+- IE9: cifras del informe no coincidían con el dashboard → regla: el mismo número debe salir igual en notebook, dashboard e informe.
+- Enlace de Looker quedó como placeholder → en EP3 el enlace debe funcionar y verificarse en incógnito.
 
 ---
 
-## 3. DATOS Y LIMPIEZA (Fases 0–1)
+## 3. DATOS Y FUENTES
 
-**Estado:** hecha y reproducible. `python src/limpieza.py` regenera los 6 CSV y falla si un control no se cumple (verificado 06/10).
+**Archivos de entrada:** `data/raw/movies.csv` (16.000 películas) y `data/raw/series.csv` (16.007 series).
+**397 show_id solapados** → se deduplicó conservando el registro con más votos.
+**Resultado limpio:** `data/processed/contenido_unificado.csv` — 31.991 títulos (16.000 películas, 15.991 series).
 
-**Archivos:** `src/limpieza.py`, `notebooks/01_integracion_y_limpieza.ipynb` (incluye diccionario de variables con columna "% sin dato" = nulos + "No especificado"), y en `data/processed/`: `contenido_unificado.csv` (31.991 filas), `contenido_por_genero.csv`, `contenido_por_pais.csv`, `contenido_por_director.csv`, `mapa_generos.csv`, `control_calidad.csv` (17 controles). Las tablas largas no incluyen `description` ni `cast`.
-`contenido_unificado.csv` incluye la columna `es_telefilm`. `mapa_generos.csv` ya no contiene «TV Movie».
+**Exclusiones declaradas:**
+- 628 telefilms ("TV Movie") excluidos de la dimensión género (formato, no género — D11).
+- 11.092 títulos sin director (68,5 % de las series).
+- 1.088 sin género principal, 2.261 sin país principal.
 
-**Decisiones:**
-1. `content_id` = `M-<show_id>` / `S-<show_id>`: 397 `show_id` se solapan entre archivos con títulos distintos.
-2. 9 `show_id` duplicados en series (todos de 2025): se conserva la fila con más votos y, si empatan, la de mayor popularidad → 15.991 series; total 31.991.
-3. `vote_average_clean` = NaN si `vote_count` = 0; `calificacion_confiable` = `vote_count` ≥ 10 (`UMBRAL_VOTOS`).
-4. `indice_engagement` = percentil (0–100) de `popularity` dentro de cada tipo (escalas no comparables: mediana 10,9 vs 36,2).
-5. `genero_unificado` en español vía `mapa_generos.csv` (Action+Adventure y Science Fiction+Fantasy se unen); sin repeticiones por título.
-6. Finanzas solo en películas (0 = no informado). Se eliminan `duration`, `rating` y `type`.
-ROI mediano 1,70×; promedio 781,5× (outliers). Géneros: 12 en ambos tipos (11 reales + "No especificado"); solo películas (5): Suspenso, Terror, Romance, Historia, Música; solo series (4): Reality, Telenovela, Talk show, Noticias. "No especificado": 108 películas, 1.071 series. Telefilms (`es_telefilm`): 628 películas (3,9 %).
-
-**Cifras:**
-
-| | Películas | Series |
-|---|---|---|
-| Títulos | 16.000 | 15.991 |
-| Sin votos | 894 (5,6 %) | 3.666 (22,9 %) |
-| Con ≥ 10 votos | 14.183 (88,6 %) | 6.148 (38,4 %) |
-| Calificación prom. EP1 (con ceros) | 5,956 | 5,420 |
-| Calificación prom. corregida | 6,309 | 7,024 |
-| Popularidad mediana / promedio | 10,91 / 20,38 | 36,20 / 64,88 |
-| Con datos financieros | 3.540 (22,1 %) | 0 |
-
-ROI mediano 1,70×; promedio 781,5× (outliers). Géneros: 12 en ambos tipos (11 reales + "No especificado"); solo películas (5): Suspenso, Terror, Romance, Historia, Música; solo series (4): Reality, Telenovela, Talk show, Noticias. "No especificado": 108 películas, 1.071 series. 
-
-**Límites y riesgos:** ambos datasets tienen exactamente 1.000 títulos por año (la composición por año no es hallazgo); director nulo en 68,5 % de las series (no comparable entre tipos); comparar tipos solo con los 11 géneros comunes; cualquier gráfico de calidad muestra la cobertura de votos.
-**Pendiente:** — (opcional: calcular "% sin dato" por tipo en el diccionario).
-
-## 4. EDA (Fase 2)
-
-**Estado:** hecha. `notebooks/02_eda_visualizaciones.ipynb` corre sin errores (verificado 06/10). Cada gráfico tiene ficha (problema, mensaje, métrica, por qué ese gráfico) y título dinámico calculado desde los datos. Termina con una síntesis que responde la pregunta de negocio.
-Tras D11 (telefilms), las cifras G1–G8 de `cifras_clave_eda.csv` no cambian (verificado 06/10).
-
-**Archivos:** 8 PNG en `images/` (`g1_calidad_y_cobertura`, `g2_popularidad_boxplot_iqr`, `g3_engagement_calidad_genero`, `g4_volumen_por_genero`, `g5_evolucion_por_anio`, `g6_paises`, `g7_engagement_vs_calidad`, `g8_roi_por_director`), `data/processed/cifras_clave_eda.csv` (control cruzado notebook ↔ dashboard ↔ informe) y `control_g4_vs_looker.csv` (evidencia de la diferencia de género, sección 6).
-
-**Decisiones:**
-1. G3 es una dispersión (engagement mediano vs calificación promedio solo con ≥ 10 votos, tamaño = n); reemplazó a la densidad, que estaba dominada por el denominador (popularidad).
-2. G4 y G6 usan base fija = total del tipo; un título puede tener varios géneros/países, por eso no suman 100 %.
-3. G6 con países en español (`PAISES_ES`, definido en `src/kpis.py`).
-4. G8: mínimo 5 películas con datos por director (con 3 lo dominaba la franquicia Terrifier, 46×); se rotula la mediana; "Anthony y Joe Russo" se unifican (codirigen las mismas películas).
-5. G2: boxplot con regla IQR, atípicos fuera del dibujo y cuantificados.
-
-**Cifras:**
-
-| G | Hallazgo | Cifra clave |
-|---|---|---|
-| G1 | Series puntúan más alto, pero pocas tienen votos suficientes | 7,02 vs 6,31; 38 % vs 89 % |
-| G2 | Popularidad sesgada: la mediana representa mejor | medianas 10,9 / 36,2; atípicos 1.705 / 1.609 |
-| G3 | Engagement y calidad por género | mayor engagement: Acción y Aventura 66,4 (películas), Telenovela 84,6 (series); mejor nota: Documental 7,14 / 7,48 |
-| G4 | Oferta por género (top 7 de los géneros comunes) | Drama 43,2 % películas / 49,1 % series |
-| G5 | Los títulos de 2025 casi no tienen votos | series 49,7 % (2024) → 6,7 % (2025); películas 2025: 8,6 % |
-| G6 | EE. UU. domina películas, no series | 48,5 % vs 20,0 % |
-| G7 | Relación débil engagement–calificación | r = 0,246 películas, 0,133 series |
-| G8 | ROI agregado por director (≥ 5 películas) | top1 Chris Renaud 8,8×; su película principal aporta 23,5 % de sus ingresos; mediana global 1,70×; cobertura 22,1 % |
-
-**Límites y riesgos:**
-- G5: la caída de 2025 es por títulos recientes sin votos, no una tendencia.
-- G8: el ROI agregado pesa más a las películas de mucha taquilla; por eso se muestra también la mediana.
-- G3 depende de D7 (mediana en Looker).
-
-**Pendiente:** — (la síntesis del notebook se actualiza si cambia D4).
+**Calificaciones:** `vote_average_clean` = nulo si `vote_count = 0`. Umbral de confiabilidad: ≥ 10 votos (`calificacion_confiable`).
 
 ---
 
-## 5. KPIs (Fase 3)
+## 4. LIMPIEZA (`src/limpieza.py`)
 
-**Estado:** `python src/kpis.py` corre y termina en OK: 300/300 comparaciones entre la vía pandas y la vía estilo Looker (rtol 1e-9; total, por tipo, 30 selecciones aleatorias de año × género × país y verificación de la tabla de género) y 9/9 contrastes con las cifras de la sección 3 (verificado 06/10).
-
-**Archivos:** `src/kpis.py` y, en `data/processed/`: `looker_contenido.csv` (una fila por título, con `genero_principal`, `pais_principal` y columnas aditivas), `looker_genero.csv` (una fila por título y género, sin "No especificado"), `kpis_resumen.csv`, `kpis_por_anio.csv`, `kpis_por_genero.csv`, `kpis_por_pais.csv`, `kpis_verificacion.csv`, y `glosario.md`.
-
-**Decisiones:**
-1. Una sola tabla (`looker_contenido.csv`) alimenta todos los KPIs de la portada, para que cada filtro los afecte.
-2. Porcentajes bajo filtro: Σ numerador ÷ registros de la selección (nunca promedio de porcentajes).
-3. ROI agregado solo con filas con presupuesto e ingresos (`presupuesto_roi`, `ingresos_roi`).
-4. "% alto engagement" = percentil ≥ 75 dentro del tipo; vale 25 % por construcción en cada tipo y solo informa bajo filtros.
-5. "% estrella" = alto engagement (percentil ≥ 75) y ≥ 10 votos y nota ≥ 7 (`UMBRAL_ESTRELLA_NOTA`).
-6. Mediana del ROI solo se calcula en `kpis_resumen.csv`; en Looker se usa el ROI agregado (salvo que exista función de mediana).
-
-**Cifras:**
-
-| KPI (columna) | Total | Película | Serie |
-|---|---|---|---|
-| Títulos (`titulos`) | 31.991 | 16.000 | 15.991 |
-| Calificación promedio (`calificacion_prom`) | 6,630 | 6,309 | 7,024 |
-| % con votos suficientes (`pct_confiable`) | 63,6 % | 88,6 % | 38,4 % |
-| % alto engagement (`pct_alto_engagement`) | 25,0 % | 25,0 % | 25,0 % |
-| % estrella (`pct_estrella`) | 8,5 % | 8,1 % | 8,9 % |
-| ROI agregado (`roi_agregado`) | 2,917× | 2,917× | N/A |
-| ROI mediano (`roi_mediano`) | 1,700× | 1,700× | N/A |
-| Películas con datos financieros (`peliculas_con_datos_fin`) | 3.540 | 3.540 | 0 |
-| Cobertura financiera (`pct_cobertura_fin`) | 22,1 % | 22,1 % | N/A |
-
-Además `kpis_resumen.csv` trae `pct_del_catalogo` (base fija 31.991).
-
-**Límites y riesgos:** "% alto engagement" y "% estrella" son casi constantes en el catálogo completo; solo son informativos al filtrar por género, país o año. Al usar solo el género principal en Looker (D4), los géneros secundarios quedan subrepresentados en volumen. Esto debe declararse siempre en la página de limitaciones.
-
-**Pendiente:**
-1. Actualizar `glosario.md`: quitar densidad y popularidad promedio; agregar la fila de "% estrella"; incluir la sección "Diferencia entre fuentes" (sección 6).
-2. Agregar `looker_genero.csv` a la lista de salidas del docstring de `src/kpis.py`.
+**Estado:** 17/17 controles OK (verificado 06/10/2026).
+**Controles clave:** sin duplicados, sin nulos en campos clave, `vote_average_clean` nulo solo si `vote_count = 0`, `es_telefilm` marcado correctamente.
+**Salidas:** `contenido_unificado.csv`, `contenido_por_genero.csv`, `contenido_por_pais.csv`.
 
 ---
 
-## 6. DASHBOARD LOOKER (Fase 4)
+## 5. EDA Y GRÁFICOS (`notebooks/02_eda_visualizaciones.ipynb`)
 
-**Estado:** pendiente; aún no se ha tocado Looker.
+**Estado:** 8 gráficos PNG generados, sin errores (verificado 06/10/2026). NB01 tiene todas las decisiones de integración justificadas.
 
-**Archivos:** por crear en `dashboard/` (capturas, PDF exportado, especificación de páginas y filtros). Looker no se reproduce con archivos: entregar capturas, PDF exportado, enlace público probado en ventana de incógnito y la especificación en el README.
+**Cifras clave verificadas contra `cifras_clave_eda.csv`:**
 
-**Decisiones (ver D4, D5, D6, D7 en 1.2):**
-1. Fuente A `looker_contenido.csv`: KPIs de la portada y gráficos por tipo, año, idioma y país. Fuente B `looker_genero.csv`: todos los gráficos de género (misma base que G3 y G4). No se mezclan por `content_id` (un cruce uno-a-muchos inflaría los SUM/COUNT de la fuente A).
-2. Fórmulas de los KPIs en Looker: Títulos `COUNT_DISTINCT(content_id)`; % del catálogo `COUNT_DISTINCT(content_id)/31991`; Calificación promedio `AVG(vote_average_clean)`; % con votos suficientes `SUM(confiable_num)/COUNT(content_id)`; % alto engagement `SUM(alto_engagement)/COUNT(content_id)`; % estrella `SUM(es_estrella)/COUNT(content_id)`; ROI agregado `SUM(ingresos_roi)/SUM(presupuesto_roi)`; Cobertura financiera `SUM(financiero_num)/SUM(es_pelicula)`.
-3. Páginas: (1) resumen con KPIs, (2) catálogo película vs serie, (3) engagement vs calidad, (4) financiero (solo películas), (5) cómo leer / limitaciones. Filtros globales en el mismo lugar en todas las páginas: tipo, rango de años, idioma, género, país.
-4. Reglas para cada gráfico de categorías (D10): revisar en la interfaz que no agrupe el resto en "Otros" (en gráficos tipo torta/donut Looker puede mostrar un segmento "Otros"; verificar la opción en el editor y desactivarla), limitar el Top N, y filtrar "No especificado". La fuente A (`looker_contenido.csv`) incluye "No especificado" (1.088 títulos por género principal, 2.261 por país); la fuente B ya lo excluye.
+| Gráfico | Cifra | Valor |
+|---------|-------|-------|
+| G1 | Calificación películas / series | 6,31 / 7,02 |
+| G1 | % con ≥ 10 votos películas / series | 88,6 % / 38,4 % |
+| G2 | Mediana popularidad películas / series | 10,9 / 36,2 |
+| G3 | Correlación engagement–calidad (r) | 0,25 películas / 0,13 series |
+| G4 | Drama % (todos los géneros) | 43,2 % películas / 49,1 % series |
+| G4 | Drama % (solo género principal) | 22,9 % películas / 31,5 % series |
+| G6 | EE. UU. % catálogo películas / series | 48,5 % / 20,0 % |
+| G8 | ROI agregado top director | 8,80× |
+| G8 | Cobertura financiera películas | 22,1 % (3.540 títulos) |
+| G8 | ROI mediano global | 1,70× |
 
-**Cifras:** `control_g4_vs_looker.csv` — Drama 43,2 % películas / 49,1 % series (todos los géneros del título, G4 y fuente B) frente a 22,9 % / 31,5 % (solo `genero_principal`, fuente A); Acción y Aventura en películas 26,0 % vs 14,2 %.
-
-**Límites y riesgos (declarar en la página 5):**
-- Los KPIs de la portada cuentan solo el género principal (primero listado); los gráficos de género cuentan todos los géneros. 75 % de las películas y 57 % de las series tienen 2 o más géneros (promedio 2,25 y 1,87 sobre la tabla larga sin 'No especificado' ni telefilms). Que el primero listado sea el género dominante no está verificado.
-- **Decisión D4 (Integridad vs Granularidad):** Se descarta el uso de la tabla larga de géneros en Looker. Para cumplir con el indicador IE14 (filtros globales sin quiebres) e IE18 (KPIs correctamente calculados sin multiplicaciones), todo el dashboard consumirá `looker_contenido.csv` usando `genero_principal` y `pais_principal`. La pérdida de volumen en géneros secundarios transversales como el Drama se justificará en el informe y en la página de limitaciones como una decisión consciente en pro de la consistencia visual (IE6) y matemática.
-- Comprobar en Looker si existe `MEDIAN` (D7); si no, precalcular una tabla por género con la mediana del engagement.
-- Verificar que cada gráfico de Looker muestre la misma métrica, orden y cifras que `cifras_clave_eda.csv` (el fallo de EP1).
-- Verificación en vivo obligatoria (IE9): publicar el dashboard, abrir el enlace en ventana de incógnito, y comparar 3 cifras por gráfico con `cifras_clave_eda.csv` y con el informe. Que texto y gráfico coincidan es la causa de los comentarios IE6 e IE9 de EP1.
-- «Película de TV» (formato) ya no aparece como género en ninguna fuente de datos (D11); en la página de limitaciones declarar que se excluyeron 628 telefilms de la dimensión género.
-
-**Pendiente:** conectar las dos fuentes, construir las 5 páginas, comparar 3 cifras por gráfico contra el notebook, exportar capturas/PDF y probar el enlace público.
+**Notas de gráficos:**
+- G3 usa mediana del índice de engagement (no promedio) para evitar el sesgo de popularidad.
+- G8 usa **todos los directores listados** (Renaud: 6 películas, ROI 8,8×). El dashboard usará `director_principal` (primer director, Renaud: 5 películas, ROI 9,0×). Diferencia declarada en el informe.
+- Engagement por género es significativo solo dentro de cada tipo: en películas lideran Acción y Aventura (60,6) y Ciencia ficción y Fantasía (60,4); en series lideran Telenovela (70,9) y Talk show (60,4).
 
 ---
 
-## 7. INFORME, RESUMEN E INFOGRAFÍA (Fase 5)
+## 6. KPIs Y DASHBOARD (`src/kpis.py`, Looker Studio)
 
-**Estado:** pendiente. `src/infografia.py` (genera `images/infografia_resumen.png`, una página, para IE17) y `parches_ep3.md` fueron mencionados en notas anteriores pero NO se revisaron en la consolidación del 06/10 (no se subieron): verificar antes de usar.
+**Estado kpis.py:** 300/300 comparaciones OK (verificado 06/10/2026).
 
-**Archivos:** por crear en `reports/`: `informe_ejecutivo.pdf` (10 secciones de la sección 2), `resumen_ejecutivo` (PDF o PPTX, D8).
+**Cifras globales del catálogo (sin filtros):**
 
-**Decisiones:**
-1. El informe incluye una subsección en "Justificación de las representaciones gráficas" sobre atributos visuales y carga cognitiva (apunta a IE5/IE6).
-2. Cada gráfico del informe declara problema de negocio y audiencia, y por qué ese tipo de gráfico minimiza el esfuerzo de lectura.
-3. El informe declara la corrección de los ceros de EP1 (D3) como punto de calidad de datos y evaluación crítica.
+| KPI | Valor |
+|-----|-------|
+| Títulos totales | 31.991 (16.000 películas / 15.991 series) |
+| Calificación promedio | 6,63 |
+| % con votos suficientes | 63,6 % |
+| % alto engagement | 25,0 % |
+| % estrella | 8,47 % |
+| Cobertura financiera | 22,1 % (solo películas) |
+| ROI agregado | 2,92× |
+| ROI mediano | 1,70× |
 
-**Cifras:** las de las secciones 3 a 5; no recalcular a mano, usar `cifras_clave_eda.csv` y `kpis_resumen.csv`.
+**Fórmulas para Looker Studio:**
+- Títulos: `COUNT_DISTINCT(content_id)`
+- % del catálogo: `COUNT_DISTINCT(content_id) / 31991` (denominador fijo)
+- % alto engagement: `SUM(alto_engagement) / COUNT_DISTINCT(content_id)`
+- % estrella: `SUM(es_estrella) / COUNT_DISTINCT(content_id)`
+- ROI agregado: `SUM(ingresos_roi) / SUM(presupuesto_roi)`
 
-**Límites y riesgos:** una imagen completa de géneros (todos los géneros del título) puede ir en el informe como análisis aparte, con nombre distinto al del dashboard.
+**Columnas de `looker_contenido.csv` (20 columnas, 31.991 filas):**
+`content_id`, `title`, `tipo_contenido`, `es_pelicula`, `release_year`, `idioma`, `genero_principal`, `pais_principal`, `director_principal`, `popularity`, `indice_engagement`, `alto_engagement`, `es_estrella`, `vote_count`, `vote_average_clean`, `confiable_num`, `financiero_num`, `presupuesto_roi`, `ingresos_roi`, `roi`.
 
-**Pendiente:** redactar informe y resumen; incluir la infografía; enlace/capturas del Looker (el pendiente de EP1 que la docente señaló).
+**Top 7 países por volumen (sin "No especificado"):**
+EE. UU. (8.180), Japón (2.759), China (2.283), Corea del Sur (2.070), Reino Unido (1.712), Canadá (1.509), Francia (1.353).
+
+**Estructura del dashboard (5 páginas):**
+1. **Resumen y Tendencias:** dispersión Calidad vs Engagement por género + líneas de tiempo desglosadas por tipo.
+2. **Película vs. Serie:** barras comparativas con cobertura de votos.
+3. **Exploración de Categorías:** Top 7 géneros y países por volumen, sin "No especificado", sin "Otros".
+4. **Desempeño Financiero:** tabla de directores (mínimo 5 películas), tarjetas ROI y cobertura.
+5. **Metodología y Limitaciones:** decisiones D4, D10, D11 y ausencias declaradas.
+
+**Limitaciones a declarar en página 5:**
+- `genero_principal` subestima géneros transversales (Drama: 43,2 % real vs 22,9 % en dashboard).
+- 75 % de películas y 57 % de series tienen 2 o más géneros.
+- 1.088 sin género, 2.261 sin país, 11.092 sin director.
+- 628 telefilms excluidos (formato, no género).
+- Dataset muestreado artificialmente: 1.000 títulos por año y tipo (991 en series de 2025).
+- Solo el 22,1 % de las películas tiene datos financieros; las series: 0 %.
+
+---
+
+## 7. INFORME (`reports/informe_ejecutivo.md`)
+
+**Estado:** borrador completo del Capítulo 2 (Diseño de Dashboards Interactivo), verificado contra notebooks y CSV el 07/10/2026.
+
+**Cifras del informe alineadas con EDA:** calificaciones, coberturas, correlaciones, porcentajes de género, ROI — todas verificadas el 07/10/2026.
+
+**Pendiente:** convertir a PDF con portada y formato final de entrega.
 
 ---
 
 ## 8. ENTREGA Y CIERRE (Fase 6)
 
-**Estado:** pendiente.
-
-**Archivos:** `README.md` (pasos de ejecución, estructura, especificación del dashboard, enlace de Looker), `requirements.txt`.
-
-**Decisiones:** `kpis.py` y `limpieza.py` usan `if __name__ == "__main__":`, así que el `from kpis import PAISES_ES` de NB02 es seguro.
-
-**Cifras:** —
-
-**Límites y riesgos:** el enlace de Looker no puede quedar como placeholder (feedback de EP1).
-
-**Pendiente:** correr todo desde una carpeta limpia (`limpieza.py` → `kpis.py` → NB01 → NB02), revisar contra la rúbrica, cruzar cifras notebook ↔ dashboard ↔ informe, y ejecutar la LIMPIEZA FINAL de la sección 0.
+**Pendiente:**
+1. Construir dashboard en Looker Studio y verificar en incógnito (3 cifras por gráfico contra `cifras_clave_eda.csv`).
+2. Convertir informe a PDF con portada.
+3. Completar `README.md` con pasos de ejecución, estructura y enlace de Looker.
+4. Verificar `requirements.txt`.
+5. Correr todo desde cero (`limpieza.py` → `kpis.py` → NB01 → NB02) desde carpeta limpia.
+6. **Limpieza final:** eliminar `NOTAS.md` y pautas PDF antes de la entrega.
 
 ---
 
 ## 9. RIESGOS Y LECCIONES
 
-1. No atribuir a la docente reglas que no dio (una nota anterior lo hizo): ver sección 2.
-2. El mismo número debe salir igual en notebook, dashboard e informe: es el fallo de EP1.
-3. Los títulos de los gráficos afirman hallazgos: verificar siempre contra los datos (G5 y G7 tenían títulos falsos antes de corregirse).
-4. Las métricas con valor fijo por construcción (engagement promedio, % alto engagement en el total) no informan: no usarlas como KPI global.
-5. Cualquier gráfico de calidad debe mostrar la cobertura de votos; los títulos de 2025 aún no tienen nota fiable.
-6. El gráfico de géneros de EP1 mezclaba una barra "Otros" y categorías que no eran géneros, y contradecía el texto (comentarios IE5, IE6 e IE9). En todo gráfico de categorías: solo categorías reales, Top N rotulado, sin "Otros".
+1. El mismo número debe salir igual en notebook, dashboard e informe (fallo de EP1).
+2. Los títulos de gráficos afirman hallazgos: verificar siempre contra los datos.
+3. Métricas con valor fijo por construcción (engagement promedio global) no informan: no usarlas como KPI.
+4. Todo gráfico de calidad debe mostrar la cobertura de votos.
+5. Gráficos de categorías: solo categorías reales, Top N rotulado, sin "Otros" (IE5, IE6, IE9 de EP1).
+6. El enlace de Looker debe funcionar y verificarse en incógnito antes de entregar.
+
 ---
 
-## 10. REGISTRO DE CAMBIOS (más reciente arriba; una línea por cambio)
+## 10. REGISTRO DE CAMBIOS
 
-- 06/10/2026 — D4 cerrada: se descarta usar `looker_genero.csv` en Looker Studio a favor de la Opción A (`looker_contenido.csv` con género principal) para garantizar la integridad de los filtros cruzados (IE14) y los cálculos de KPIs (IE18).
-- 06/10/2026 — Verificación en copia aparte con limpieza.py y kpis.py subidos: 17/17 controles, 300/300 + 9/9 en KPIs; cifras de la sección 6 revisadas, dos ajustes menores (secciones 6 y 10).
-- 06/10/2026 — Revisión de cuadernos completada: se verificó que todas las decisiones de integración/limpieza (NB01) y la elección de cada gráfico G1-G8 (NB02) cuentan con su respectiva justificación documentada (secciones 4 y 5 del NB01, y viñetas 'Por qué' en NB02).
-- 06/10/2026 — Verificación con datos reales: limpieza.py 17/17, kpis.py 300/300 + 9/9, NB01 y NB02 sin errores (8 PNG); se detectan correcciones de texto en NOTAS.md (1.1: 15→17 controles y 301→300 comparaciones; duplicado y truncado en sección 3; ruta de glosario), en glosario.md (22,7→22,9 % y fila % estrella) y solapamiento de etiquetas en G3 (secciones 1, 3, 4, 5 y 9).
-- 06/10/2026 — D11: «TV Movie» se marca con `es_telefilm` (628 títulos) y se excluye de la dimensión género sin borrar el texto de `genres`; `limpieza.py` pasa a 17 controles, `kpis.py` a 300/300; cifras G1–G8 sin cambios; NB01 actualizado (celdas 15, 16, 17 y 21) (secciones 1.1, 1.2, 3, 4, 5 y 6).
-- 06/10/2026 — Decisión: glosario.md se mantiene como archivo aparte en la raíz del proyecto (no se elimina ni se mueve a reports/). Se agrega la regla de alcance para agentes (sin commits sin permiso; revisar = solo leer y reportar).
-- 06/10/2026 — Se amplía la retroalimentación real de la docente (comentarios IE5, IE6 e IE9 sobre la barra "Otros" y las categorías que no son géneros); se agrega D10 y se corrige el checklist que sugería agrupar en "Otros" (secciones 1.2, 2, 6 y 9).
-- 06/10/2026 — Consolidación completa de este archivo en la estructura 0–10; verificación con datos reales (`limpieza.py` 15/15 OK, `kpis.py` 300/300, NB01 y NB02 sin errores); se registra D4 y el hueco del filtro de país (secciones 1, 5, 6).
-- 05/10/2026 — Se aplican los fixes de revisión: `looker_genero.csv` como fuente de gráficos de género; G3 se guarda como `g3_engagement_calidad_genero.png`; se eliminan densidad y popularidad promedio de los KPIs; se agrega `pct_estrella`.
-- 05/10/2026 — G5, G6, G7 y G8 corregidos (títulos falsos, países en español, mínimo 5 películas por director); G3 rediseñado; síntesis agregada a NB02; diccionario de variables en NB01.
-- 05/10/2026 — Decisiones D1 y D2 (Looker Studio; notebooks solo de análisis). Se corrige la retroalimentación de la docente (sección 2).
-- 05/10/2026 — Fases 0–3 construidas por primera vez (estructura, integración y limpieza, EDA G1–G8, KPIs).
+- 07/10/2026 — Verificación EDA vs informe: 18/18 cifras clave coinciden entre notebooks y `reports/informe_ejecutivo.md`. NOTAS.md consolidado y resumido.
+- 07/10/2026 — `kpis.py`: agrega `director_principal` (primer director, Russo unificado, limpieza de espacios y capitalización), 22 traducciones de países adicionales. CSV regenerado (20 columnas). Informe corregido: 9 imprecisiones técnicas y estadísticas.
+- 06/10/2026 — D4 cerrada: dashboard usa `looker_contenido.csv` (Opción A). Verificación 17/17 y 300/300 OK. G3 labels corregidas. glosario.md finalizado.
+- 05/10/2026 — Fases 0–3 construidas: estructura, limpieza, EDA G1–G8, KPIs.
