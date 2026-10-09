@@ -218,3 +218,7 @@ __marimo__/
 .streamlit/secrets.toml
 
 .agents/
+
+# Archivos locales específicos
+instrucciones_looker.md
+NOTAS.md

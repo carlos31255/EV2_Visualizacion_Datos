@@ -71,9 +71,14 @@ def preparar_looker(df, gen, pais):
     dp = out["director_principal"]
     out["director_principal"] = dp.str.casefold().map(dp.groupby(dp.str.casefold()).agg(lambda s: s.mode().iat[0]))
 
+    # Presencia real (todos los géneros / países del título) para los dos hallazgos centrales: 1 columna 0/1 por título
+    out["es_drama"] = out["content_id"].isin(gen.loc[gen["genero_unificado"] == "Drama", "content_id"]).astype(int)
+    out["es_eeuu"] = out["content_id"].isin(pais.loc[pais["pais"] == "United States of America", "content_id"]).astype(int)
+
     cols = ["content_id", "title", "tipo_contenido", "es_pelicula", "release_year", "idioma",
             "genero_principal", "pais_principal", "director_principal", "popularity", "indice_engagement", "alto_engagement", "es_estrella", "vote_count",
-            "vote_average_clean", "confiable_num", "financiero_num", "presupuesto_roi", "ingresos_roi", "roi"]
+            "vote_average_clean", "confiable_num", "financiero_num", "presupuesto_roi", "ingresos_roi", "roi",
+            "es_drama", "es_eeuu"]
     return out[cols]
 
 def preparar_looker_genero(gen):
@@ -113,6 +118,8 @@ def kpis_pandas(d):
         "pct_confiable": d["confiable_num"].sum() / n * 100 if n else np.nan,
         "pct_alto_engagement": d["alto_engagement"].sum() / n * 100 if n else np.nan,
         "pct_estrella": d["es_estrella"].sum() / n * 100 if n else np.nan,
+        "pct_drama": d["es_drama"].sum() / n * 100 if n else np.nan,
+        "pct_eeuu": d["es_eeuu"].sum() / n * 100 if n else np.nan,
         "roi_agregado": fin["ingresos_roi"].sum() / fin["presupuesto_roi"].sum() if len(fin) else np.nan,
         "roi_mediano": fin["roi"].median() if len(fin) else np.nan,
         "peliculas_con_datos_fin": len(fin),
@@ -128,6 +135,8 @@ def kpis_looker(d):
     ok = ~np.isnan(cal)
     alto = d["alto_engagement"].to_numpy(float)
     est = d["es_estrella"].to_numpy(float)
+    drama = d["es_drama"].to_numpy(float)
+    eeuu = d["es_eeuu"].to_numpy(float)
     conf = d["confiable_num"].to_numpy(float)
     fin = d["financiero_num"].to_numpy(float) == 1
     pel = d["es_pelicula"].to_numpy(float)
@@ -141,6 +150,8 @@ def kpis_looker(d):
         "pct_confiable": conf.sum() / n * 100 if n else np.nan,
         "pct_alto_engagement": alto.sum() / n * 100 if n else np.nan,
         "pct_estrella": est.sum() / n * 100 if n else np.nan,
+        "pct_drama": drama.sum() / n * 100 if n else np.nan,
+        "pct_eeuu": eeuu.sum() / n * 100 if n else np.nan,
         "roi_agregado": np.nansum(ing[fin]) / np.nansum(pre[fin]) if fin.any() else np.nan,
         "roi_mediano": mediana,
         "peliculas_con_datos_fin": int(fin.sum()),
@@ -238,7 +249,9 @@ REFERENCIAS = [("Película", "titulos", 16000, 0), ("Serie", "titulos", 15991, 0
                ("Película", "calificacion_prom", 6.309, 0.001), ("Serie", "calificacion_prom", 7.024, 0.001),
                ("Película", "pct_confiable", 88.6, 0.05), ("Serie", "pct_confiable", 38.4, 0.05),
                ("Película", "peliculas_con_datos_fin", 3540, 0), ("Película", "pct_cobertura_fin", 22.1, 0.05),
-               ("Película", "roi_mediano", 1.70, 0.005)]
+               ("Película", "roi_mediano", 1.70, 0.005),
+               ("Película", "pct_drama", 43.2, 0.05), ("Serie", "pct_drama", 49.1, 0.05),      # G4 (todos los géneros)
+               ("Película", "pct_eeuu", 48.5, 0.05), ("Serie", "pct_eeuu", 20.0, 0.05)]       # G6 (todos los países)
 
 
 def contrastar(resumen):
