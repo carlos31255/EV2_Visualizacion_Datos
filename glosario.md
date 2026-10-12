@@ -1,45 +1,60 @@
-# Glosario de KPIs — StreamView Analytics (EP3)
+# Glosario de Variables y Métricas — StreamView Analytics (EP3)
 
-Fuente única del dashboard y de la infografía (D4, D12), generada por `src/kpis.py`:
-- `data/processed/looker_contenido.csv`: una fila por título (22 columnas). Es lo único que se conecta a Looker Studio.
-- `data/processed/looker_genero.csv`: tabla larga (una fila por título y género) que `kpis.py` genera solo para verificar cifras contra el notebook. No se conecta a Looker.
+Fuente principal del dashboard y de la infografía (D4, D12), generada por `src/kpis.py`:
+- `data/processed/looker_contenido.csv`: tabla maestra de 31.991 filas (una fila por título) y 22 columnas. Fuente única conectada a Looker Studio.
+- `data/processed/looker_genero.csv`: tabla desagregada por género utilizada exclusivamente para contraste y verificación interna frente a los notebooks. No se conecta a Looker Studio.
 
-Todos los KPIs responden a los filtros del dashboard. Los porcentajes se calculan como suma del numerador dividida por la cuenta de registros, nunca como promedio de porcentajes.
+Todos los indicadores responden a los filtros interactivos. Las proporciones agregadas se calculan como la suma del numerador dividida por el total de registros del subconjunto, evitando el promedio de porcentajes precalculados.
 
-| KPI | Definición | Cálculo en Looker | Base / límites |
-|---|---|---|---|
-| Títulos | Cantidad de títulos en la selección | COUNT_DISTINCT(content_id) | Una fila por título |
-| % del catálogo | Peso de la selección en el catálogo | COUNT_DISTINCT(content_id) / 31991 | Total unificado (denominador fijo) |
-| Calificación promedio | Nota promedio de la audiencia (0–10) | AVG(vote_average_clean) | Solo títulos con ≥ 1 voto; los 0 sin votos no son nota |
-| % con votos suficientes | Títulos cuya nota es confiable | SUM(confiable_num) / COUNT_DISTINCT(content_id) | Confiable = ≥ 10 votos. Todo gráfico de calidad debe mostrar esta cobertura |
-| % de alto engagement | Títulos entre el 25 % más popular de su tipo | SUM(alto_engagement) / COUNT_DISTINCT(content_id) | Alto = percentil ≥ 75 dentro del tipo; vale 25 % por construcción en el catálogo completo, informa al filtrar |
-| % de títulos estrella | Títulos estrella (engagement y calificación) | SUM(es_estrella) / COUNT_DISTINCT(content_id) | Estrella = percentil ≥ 75, nota ≥ 7, ≥ 10 votos |
-| % con Drama (todos sus géneros) | Títulos que incluyen Drama entre sus géneros | SUM(es_drama) / COUNT_DISTINCT(content_id) | Cuenta el Drama aunque no sea el género principal; películas 43,2 %, series 49,1 % (igual que G4). No suma 100 % con otros géneros |
-| % con EE. UU. (todos los países) | Títulos con EE. UU. entre sus países de producción | SUM(es_eeuu) / COUNT_DISTINCT(content_id) | Cuenta EE. UU. aunque no sea el país principal; películas 48,5 %, series 20,0 % (igual que G6) |
-| ROI agregado | Retorno financiero del conjunto | SUM(ingresos_roi) / SUM(presupuesto_roi) | Solo películas con presupuesto e ingresos > 0. Por director: mínimo 5 películas con datos |
-| ROI mediano | Retorno de la película típica | Mediana de ingresos/presupuesto (`roi`) | Solo películas con datos; robusto a atípicos; si Looker no ofrece MEDIAN, usar el valor de `kpis_resumen.csv` (global 1,70×) |
-| Cobertura financiera | % de películas con datos financieros | SUM(financiero_num) / SUM(es_pelicula) | Las series no tienen datos financieros |
+---
 
-## Género, país y director principal
-Para que cada título cuente una sola vez, el dashboard usa `genero_principal`, `pais_principal` y `director_principal`: el primer elemento listado de cada título. Es un supuesto no verificado (el primero listado podría no ser el dominante). Reglas:
-- Sin dato: "No especificado" (1.088 títulos sin género, 2.261 sin país, 11.092 sin director). Se excluye de los gráficos de categorías.
-- `director_principal`: se unifica a "Anthony Russo / Joe Russo" y se limpian espacios y mayúsculas.
-- Los telefilms ("TV Movie", 628 títulos) no cuentan como género.
+## 1. Variables del dataset maestro (`looker_contenido.csv`)
 
-## Diferencia entre el EDA y el dashboard (limitación declarada)
-Los gráficos del notebook (G4, G6) cuentan todos los géneros y países de cada título; el dashboard usa solo el principal. Por eso las cifras difieren:
+* **content_id:** Identificador alfanumérico único por título ("M-" para películas y "S-" para series). Llave primaria que resuelve el solapamiento de identificadores originales entre formatos.
+* **title:** Nombre oficial de la obra audiovisual.
+* **tipo_contenido:** Clasificación del formato entre Película y Serie.
+* **es_pelicula:** Variable binaria que asigna valor 1 a películas y 0 a series.
+* **release_year:** Año de estreno oficial de la obra, en formato numérico entero (2010 a 2025). Permite control temporal continuo.
+* **idioma:** Código de idioma original de producción de la obra.
+* **genero_principal:** Primer género registrado del título según la taxonomía homologada en español. Asigna "No especificado" si carece de registro. Excluye telefilms ("TV Movie").
+* **pais_principal:** Primer país de producción registrado, normalizado al español. Asigna "No especificado" si carece de registro.
+* **director_principal:** Primer director registrado. Unifica la variante "Anthony Russo / Joe Russo" y asigna "No especificado" en obras sin registro.
+* **popularity:** Índice de popularidad bruto de TMDb, basado en volumen de interacciones, búsquedas y visitas recientes.
+* **indice_engagement:** Métrica estandarizada de percentil (escala 0 a 100) calculada dentro de cada tipo de contenido para eliminar asimetrías de escala y permitir comparabilidad.
+* **alto_engagement:** Indicador binario con valor 1 si el título pertenece al percentil 75 o superior de su tipo (cuartil superior de interacción), y 0 en caso contrario.
+* **es_estrella:** Indicador binario con valor 1 si el título cumple conjuntamente: percentil de engagement ≥ 75, calificación promedio ≥ 7,0 y respaldo de al menos 10 votos.
+* **vote_count:** Conteo total de evaluaciones emitidas por los usuarios.
+* **vote_average_clean:** Calificación promedio de la audiencia en escala 0 a 10. Contiene valor nulo para títulos con 0 votos para evitar el sesgo de calificar con cero títulos sin evaluación.
+* **confiable_num:** Indicador binario con valor 1 si la calificación cuenta con al menos 10 votos (`vote_count` ≥ 10), y 0 si tiene menos de 10 votos.
+* **financiero_num:** Indicador binario con valor 1 si el título cuenta simultáneamente con presupuesto e ingresos mayores a cero, y 0 en caso contrario.
+* **presupuesto_roi:** Presupuesto de producción en USD asignado al título, restringido a registros con datos financieros válidos.
+* **ingresos_roi:** Recaudación global en taquilla en USD asignada al título, restringida a registros con datos financieros válidos.
+* **roi:** Retorno de inversión individual de la obra, calculado como recaudación dividida por presupuesto (`ingresos_roi / presupuesto_roi`).
+* **es_drama:** Indicador binario con valor 1 si el título incluye Drama entre cualquiera de sus géneros registrados (principales o secundarios), y 0 en caso contrario.
+* **es_eeuu:** Indicador binario con valor 1 si el título incluye a Estados Unidos entre cualquiera de sus países de producción (principales o secundarios), y 0 en caso contrario.
 
-| Cifra | EDA (todos) | Dashboard (principal) |
-|---|---|---|
-| Drama, % de películas | 43,2 % | 22,9 % |
-| EE. UU., % de películas | 48,5 % | 35,6 % |
-| EE. UU., % de series | 20,0 % | 15,5 % |
+---
 
-Para no perder el valor real en los dos hallazgos centrales, el CSV incluye `es_drama` y `es_eeuu` (1 si el título tiene ese género o país en su lista completa), que alimentan las tarjetas "% con Drama" y "% con EE. UU.". El resto de las cifras por género o país del dashboard son "principal" y así deben rotularse. Los directores también usan solo el primero: en el EDA (G8) Renaud tiene 6 películas y ROI 8,8×, y en el dashboard 5 y 9,0×.
+## 2. Métricas e indicadores de Looker Studio
 
-## Definiciones de calificación
-- G1 y G5 del notebook, y `AVG(vote_average_clean)` en Looker: cualquier título con votos (se acompaña del % con ≥ 10 votos).
-- G3 y G7 del notebook, y la dispersión de Looker (filtro `confiable_num = 1`): solo títulos con ≥ 10 votos.
+* **Títulos totales:** Conteo de obras únicas presentes en la selección activa (`COUNT_DISTINCT(content_id)`). Base: una fila por título.
+* **% del catálogo:** Proporción de títulos seleccionados respecto al total fijo unificado de 31.991 obras (`COUNT_DISTINCT(content_id) / 31991`). Denominador fijo.
+* **Calificación promedio:** Media aritmética de las calificaciones válidas (`AVG(vote_average_clean)`). Excluye títulos sin votos.
+* **% con votos suficientes:** Proporción de títulos cuya evaluación posee respaldo estadístico suficiente (`SUM(confiable_num) / COUNT_DISTINCT(content_id)`). Umbral de confiabilidad: ≥ 10 votos.
+* **% alto engagement:** Proporción de títulos pertenecientes al percentil 75 o superior de su formato (`SUM(alto_engagement) / COUNT_DISTINCT(content_id)`). Vale 25 % a nivel global por definición metodológica.
+* **% de títulos estrella:** Proporción de obras de alto rendimiento simultáneo en interacción, evaluación crítica y respaldo muestral (`SUM(es_estrella) / COUNT_DISTINCT(content_id)`).
+* **% con Drama (todos sus géneros):** Proporción de títulos que registran Drama en cualquiera de sus posiciones de género (`SUM(es_drama) / COUNT_DISTINCT(content_id)`). Coincide con G4 (43,2 % en películas, 49,1 % en series).
+* **% con EE. UU. (todos los países):** Proporción de títulos con producción en Estados Unidos en cualquier orden de registro (`SUM(es_eeuu) / COUNT_DISTINCT(content_id)`). Coincide con G6 (48,5 % en películas, 20,0 % en series).
+* **Cobertura financiera:** Porcentaje de películas que cuentan con registros válidos de presupuesto y recaudación (`SUM(financiero_num) / SUM(es_pelicula)`). Representa el 22,1 % de las películas; las series poseen 0 % de cobertura.
+* **ROI agregado:** Retorno financiero acumulado del conjunto analizado (`SUM(ingresos_roi) / SUM(presupuesto_roi)`). Requiere un mínimo de 5 títulos con datos al evaluar directores.
+* **ROI mediano:** Valor mediano del rendimiento financiero individual (`roi`) para títulos con información financiera. Representa 1,70× a escala global.
 
-## Cambios respecto a EP1
-Las calificaciones de EP1 incluían ceros que en realidad eran títulos sin votos; aquí se excluyen.
+---
+
+## 3. Criterios de asignación y limitaciones metodológicas
+
+* **Atribución principal (género, país y director):** Para garantizar que cada título compute una sola vez en tablas y filtros cruzados, el dashboard emplea exclusivamente el primer valor listado en la fuente original. Las ausencias se agrupan bajo "No especificado" (1.088 títulos sin género, 2.261 sin país y 11.092 sin director), categoría excluida de los rankings de categorías.
+* **Diferencia entre EDA y Dashboard:** En el análisis exploratorio (G4, G6) los títulos se cuentan en cada categoría secundaria que posean, mientras que en el dashboard computan una única vez. Por ello, las proporciones por atributo principal difieren de la cobertura transversal (Drama en películas: 22,9 % principal vs. 43,2 % transversal; EE. UU. en películas: 35,6 % principal vs. 48,5 % transversal; EE. UU. en series: 15,5 % principal vs. 20,0 % transversal). Las variables `es_drama` y `es_eeuu` restituyen la medición transversal sin duplicar registros.
+* **Exclusión de telefilms:** Las producciones catalogadas como "TV Movie" (628 títulos) constituyen un formato de emisión televisiva y no un género temático, por lo cual se excluyen de la dimensión de género (D11).
+* **Directores unificados:** Se homologan las variantes del dúo de realizadores a "Anthony Russo / Joe Russo" y se depuran espacios y formatos de mayúsculas.
+* **Confiabilidad en evaluaciones:** Las calificaciones de obras con menos de 10 votos presentan alta dispersión y riesgo de manipulación muestral, por lo que los análisis de dispersión y correlación calidad-engagement aíslan los títulos con `confiable_num = 1`.
