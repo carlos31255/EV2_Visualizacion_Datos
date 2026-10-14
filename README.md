@@ -15,7 +15,7 @@ El proyecto sigue estándares profesionales de ciencia de datos, separando clara
 ```text
 📁 EP3_visualizacion_datos/
 ├── 📁 data/
-│   ├── raw/                 # Archivos originales inmutables (movies.csv, series.csv)
+│   ├── raw/                 # Archivos originales inmutables (netflix_movies_detailed_up_to_2025.csv, netflix_tv_shows_detailed_up_to_2025.csv)
 │   └── processed/           # Datasets limpios y Data Marts (looker_contenido.csv, kpis_*.csv)
 ├── 📁 src/                  # Scripts de producción (pipeline ETL)
 │   ├── limpieza.py          # Integración, limpieza, cálculo de percentiles y manejo de nulos
@@ -25,7 +25,7 @@ El proyecto sigue estándares profesionales de ciencia de datos, separando clara
 │   └── 02_eda_visualizaciones.ipynb     # Análisis Exploratorio y generación de gráficos G1-G8
 ├── 📁 images/               # Gráficos PNG exportados automáticamente por los notebooks
 ├── 📁 reports/              # Entregables escritos
-│   └── informe_ejecutivo.md # Capítulo 2: Hallazgos, narrativa visual y limitaciones
+│   └── informe_ejecutivo_P2.docx # Capítulo 2: Hallazgos, narrativa visual y limitaciones (exportable a PDF)
 └── README.md                # Este archivo
 ```
 
@@ -58,7 +58,7 @@ Para reproducir el pipeline completo desde cero y regenerar todos los CSVs y gr�
    python src/limpieza.py
    python src/kpis.py
    ```
-   *Nota: La consola imprimirá los logs de validación de calidad de datos, confirmando que 300/300 métricas coinciden exactamente.*
+   *Nota: La consola imprimirá los logs de validación de calidad de datos, confirmando que 360/360 métricas coinciden exactamente.*
 
 3. **Ejecutar Notebooks (Opcional):**
    Abre y ejecuta `notebooks/01_integracion_y_limpieza.ipynb` y luego `notebooks/02_eda_visualizaciones.ipynb` para reconstruir los gráficos ubicados en la carpeta `images/`.
